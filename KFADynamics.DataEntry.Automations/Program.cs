@@ -33,7 +33,8 @@ public static class Program
       // according to the Polyform Noncommercial license:
       ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
       // prepare and run your App here
-      BuildAvaloniaApp().UseReactiveUI().StartWithClassicDesktopLifetime(args);
+      BuildAvaloniaApp()
+        .UseReactiveUI().StartWithClassicDesktopLifetime(args);
     }
     catch (Exception ex)
     {

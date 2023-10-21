@@ -66,8 +66,11 @@
 	  <!--Condition below is needed to generate macOS App only.-->
 	  <PackageReference Include="Dotnet.Bundle" Version="0.9.13" Condition="$(RuntimeIdentifier.StartsWith('osx'))" />
 	  <PackageReference Include="Material.Icons.Avalonia" Version="2.0.1" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
 	  <PackageReference Include="MonkeyCache.LiteDB" Version="2.0.1" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="Semi.Avalonia" Version="11.0.1" />
 	  <PackageReference Include="SharpZipLib" Version="1.4.2" />
 	  <PackageReference Include="ShowMeTheXaml.Avalonia" Version="1.4.1" />
 	  <PackageReference Include="ShowMeTheXaml.Avalonia.Generator" Version="1.4.1" />
@@ -96,6 +99,7 @@
     <!-- Optional -->
     <NSRequiresAquaSystemAppearance>true</NSRequiresAquaSystemAppearance>
     <StartupObject>KFADynamics.DataEntry.Automations.Program</StartupObject>
+    <UserSecretsId>f94fe8b1-b84f-4f20-abff-1b6da960eae8</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="KFADynamicsXamlDisplay.axaml" />

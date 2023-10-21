@@ -1,44 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using KFADynamics.DataEntry.Business.Delegates;
 using KFADynamics.DataEntry.Business.Models;
 
 namespace KFADynamics.DataEntry.Business;
+
 public static class Service
 {
   public static IProcessingData? ProcessingData { get; set; }
-  public static Task Cancel()
+
+  public static Task Cancel(ErrorHandler errorHandler)
   {
     throw new NotImplementedException();
   }
-  public static Task PendingRecords()
+
+  public static Task PendingRecords(ErrorHandler errorHandler)
   {
     throw new NotImplementedException();
   }
-  public async static Task ProcessRecords()
+
+  public static async Task ProcessRecords(ErrorHandler errorHandler)
   {
     try
     {
-      await ProcessingServices.Process(ProcessingData!, CurrentErrorHandler);
+      await ProcessingServices.Process(ProcessingData!, errorHandler);
     }
     catch (Exception ex)
     {
-      ProcessingData?.NotifyMessage(new UserMessage { Message = ex.Message, MessageTitle = "Error Processing Records", MessageType= MessageType.Error });
+      errorHandler(ex.Message, "Error Processing Records", ex);
     }
   }
-  public static Task HarmonizeRecords()
+
+  public static async Task HarmonizeRecords(ErrorHandler errorHandler)
   {
-    throw new NotImplementedException();
-  }
-  public static Task ProcessedRecords()
-  {
-    throw new NotImplementedException();
+    await Task.Run(() =>
+    {
+      ProcessingData?.ShowMessage(new UserMessage
+      {
+        Message = "Leta maneno tuone venye iko",
+        MessageTitle = "Tutatest Maneno",
+        MessageType = MessageType.Warning
+      });
+    });
   }
 
-  static void CurrentErrorHandler(string message, string title = "Error", Exception? error = null)
+  public static Task ProcessedRecords(ErrorHandler errorHandler)
   {
-
+    throw new NotImplementedException();
   }
 }

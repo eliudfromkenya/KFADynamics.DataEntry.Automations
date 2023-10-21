@@ -1,10 +1,12 @@
 ﻿using System.Reactive.Subjects;
 using System.Windows.Input;
+using KFADynamics.DataEntry.Playwright.Models;
 
 namespace KFADynamics.DataEntry.Business;
 public interface IProcessingData
 {
   string BatchNumbers { get; set; }
+  UserSecretes UserSecretes { get; set; }
   string BranchCodes { get; set; }
   BehaviorSubject<bool> CanCancel { get; }
   ICommand CancelCommand { get; }
@@ -33,5 +35,7 @@ public interface IProcessingData
   string SubBackgroundImage { get; set; }
   IUserMessage UserMessage { get; set; }
   void NotifyMessage(IUserMessage message);
+  void ShowMessage(IUserMessage message);
   void ReportProgress(IProgressMessage message);
+  void CurrentErrorHandler(string message, string title = "Error", Exception? error = null);
 }

@@ -6,13 +6,20 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Controls.Notifications;
 using Avalonia.Media;
 using Avalonia.Threading;
+using KFADynamics.DataEntry.Automations.Converters;
 using KFADynamics.DataEntry.Automations.Models;
+using KFADynamics.DataEntry.Automations.Windows;
 using KFADynamics.DataEntry.Automations.Windows.ViewModels;
 using KFADynamics.DataEntry.Business;
+using KFADynamics.DataEntry.Business.Classes;
+using KFADynamics.DataEntry.Playwright.Models;
 using Material.Icons;
 using ReactiveUI;
+using Tmds.DBus.Protocol;
+using MessageType = KFADynamics.DataEntry.Business.MessageType;
 
 namespace KFADynamics.DataEntry.Automations.Pages.ViewModels;
 
@@ -33,10 +40,10 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
   private bool _hasDocuments;
   private bool _generateAfterProcessReport = true;
   private bool _postRecordsAfterProcessing = true;
-  private UserMessage _userMessage;
+  private IUserMessage _userMessage;
 
   public bool IsBusy { get => _isBusy; set => this.RaiseAndSetIfChanged(ref _isBusy, value); }
-  public UserMessage UserMessage { get => _userMessage; set => this.RaiseAndSetIfChanged(ref _userMessage, value); }
+  public IUserMessage UserMessage { get => _userMessage; set => this.RaiseAndSetIfChanged(ref _userMessage, value); }
   public bool HasDocuments { get => _hasDocuments; set => this.RaiseAndSetIfChanged(ref _hasDocuments, value); }
   public bool GenerateAfterProcessReport { get => _generateAfterProcessReport; set => this.RaiseAndSetIfChanged(ref _generateAfterProcessReport, value); }
   public bool PostRecordsAfterProcessing { get => _postRecordsAfterProcessing; set => this.RaiseAndSetIfChanged(ref _postRecordsAfterProcessing, value); }
@@ -63,6 +70,7 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
 
   public EntryHomeViewModel()
   {
+    LoadUserSecretes();
     CancelCommand = ReactiveCommand.CreateFromTask(CancelClicked, CanCancel);
     HarmonizeCommand = ReactiveCommand.CreateFromTask(HarmonizeClicked, CanHarmonize);
     ProcessCommand = ReactiveCommand.CreateFromTask(ProcessClicked, CanProcess);
@@ -71,26 +79,57 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
     CloseCommand = ReactiveCommand.CreateFromTask(CloseClicked, CanClose);
   }
 
-  private async Task CancelClicked() => await Service.Cancel();
+  private void LoadUserSecretes()
+  {
+    Functions.RunOnBackground(() =>
+    {
+      try
+      {
+        var url = SecretAppsettingReader.ReadConfig("Dynamics:Url");
+        var username = SecretAppsettingReader.ReadConfig("Dynamics:Username");
+        var password = SecretAppsettingReader.ReadConfig("Dynamics:Password");
+        var dbConnectionString = SecretAppsettingReader.ReadConfig("ConnectionStrings:MySQLConnection");
+        var localCacheConnectionString = SecretAppsettingReader.ReadConfig("ConnectionStrings:LocalCache");
+        var encryptionKey = SecretAppsettingReader.ReadConfig("ApplicationKeys:EncryptionKey1");
+        LocalCache.ConnectionString = localCacheConnectionString;
+
+        UserSecretes = new UserSecretes
+        {
+          DbConnectionString = dbConnectionString,
+          Url = url,
+          LocalCacheConnectionString = localCacheConnectionString,
+          EncryptionKey = encryptionKey,
+          Password = password,
+          Username = username
+        };
+      }
+      catch (Exception)
+      {
+        throw;
+      }
+    }, CurrentErrorHandler);
+  }
+
+  private async Task CancelClicked() => await Service.Cancel(CurrentErrorHandler);
 
   public BehaviorSubject<bool> CanPending { get; } = new(false);
 
-  private async Task PendingClicked() => await Service.PendingRecords();
+  private async Task PendingClicked() => await Service.PendingRecords(CurrentErrorHandler);
 
   public BehaviorSubject<bool> CanProcess { get; } = new(false);
 
-  private async Task ProcessClicked() => await Service.ProcessRecords();
+  private async Task ProcessClicked() => await Service.ProcessRecords(CurrentErrorHandler);
 
   public BehaviorSubject<bool> CanHarmonize { get; } = new(false);
 
-  private async Task HarmonizeClicked() => await Service.HarmonizeRecords();
+  private async Task HarmonizeClicked() => await Service.HarmonizeRecords(CurrentErrorHandler);
 
   public BehaviorSubject<bool> CanProcessed { get; } = new(false);
 
-  private async Task ProcessedClicked() => await Service.ProcessedRecords();
+  private async Task ProcessedClicked() => await Service.ProcessedRecords(CurrentErrorHandler);
 
   public BehaviorSubject<bool> CanClose { get; } = new(true);
-  IUserMessage IProcessingData.UserMessage { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+  public UserSecretes UserSecretes { get => _userSecretes; set => this.RaiseAndSetIfChanged(ref _userSecretes, value); }
 
   private async Task CloseClicked()
   {
@@ -178,24 +217,17 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
   private static DateTime _time;
   private bool _isBusy;
 
+  public void ShowMessage(IUserMessage message) => HomePage.ShowMessage(message);
   public void NotifyMessage(IUserMessage message)
   {
     Dispatcher.UIThread.Invoke(() =>
     {
       try
       {
-        _time = DateTime.Now;
-        IBrush color = message.MessageType switch
-        {
-          MessageType.Error => Brushes.LightPink,
-          MessageType.Warning => Brushes.Orange,
-          MessageType.Success => Brushes.SkyBlue,
-          _ => Brushes.Gray,
-        };
-
+        _time = DateTime.Now;   
         UserMessage = new UserMessage
         {
-          ForeColor = color,
+          ForeColor = MessageColorConverter.ConvertColor(message.MessageType),
           Message = message.Message,
           MessageDetails = message.MessageDetails,
           MessageTitle = message.MessageTitle,
@@ -206,16 +238,23 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
         _messageTask?.Dispose();
         _messageTask = Task.Run(() =>
         {
-          Thread.Sleep(50000);
-          if (_time == UserMessage.Time)
-             UserMessage = new UserMessage();
-        });
+          if (UserMessage is UserMessage userMsg)
+          {
+            Thread.Sleep(100000);
+            if (_time == userMsg.Time)
+              UserMessage = new UserMessage();
+          }
+        });        
       }
       catch { }
     });
   }
 
-  static Task? _messageTask = null;
+  
+
+  private static Task _messageTask = null;
+  private UserSecretes _userSecretes;
+
   public void ReportProgress(IProgressMessage message)
   {
     Dispatcher.UIThread.Invoke(() =>
@@ -226,6 +265,15 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
         MiniProgress = message.MiniProgress;
         Progress = message.Progress;
         MainProgress = message.OverallProgress;
+        MiniProgressKind = message.ProcessingState switch
+        {
+          ProcessingState.GettingData => MaterialIconKind.AllInclusive,
+          ProcessingState.HarmonizingData => MaterialIconKind.BookSearch,
+          ProcessingState.PreProcessing => MaterialIconKind.ArrangeBringForward,
+          ProcessingState.PostProcessing => MaterialIconKind.TrackChanges,
+          ProcessingState.Finalizing => MaterialIconKind.CameraIris,
+          _ => MaterialIconKind.BikeFast,
+        };
 
         UserMessage = new UserMessage
         {
@@ -241,12 +289,20 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
 
         _messageTask = Task.Run(() =>
         {
-          Thread.Sleep(50000);
-          if (_time == UserMessage.Time)
-            UserMessage = new UserMessage();
+          if (UserMessage is UserMessage userMsg)
+          {
+            Thread.Sleep(100000);
+            if (_time == userMsg.Time)
+              UserMessage = new UserMessage();
+          }
         });
       }
       catch { }
     });
+  }
+
+  public void CurrentErrorHandler(string message, string title = "Error", Exception error = null)
+  {
+    NotifyMessage(new UserMessage { Message = message ?? error?.Message, MessageTitle = title ?? "Error", MessageType = MessageType.Error });
   }
 }

@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -11,7 +12,9 @@ using Avalonia.Themes.KFADynamics.Controls;
 using Avalonia.Threading;
 using KFADynamics.DataEntry.Automations.Interfaces;
 using KFADynamics.DataEntry.Automations.Windows.ViewModels;
+using KFADynamics.DataEntry.Business;
 using ReactiveUI;
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
@@ -21,6 +24,8 @@ namespace KFADynamics.DataEntry.Automations.Windows;
 internal sealed partial class HomePage : ReactiveWindow<HomePageViewModel<HomePage>>, IMainWindow
 {
   private readonly Application _app = App.Current;
+  private WindowNotificationManager? _manager;
+  static HomePage _homePage = null;
 
   #region Control fields
 
@@ -106,6 +111,7 @@ internal sealed partial class HomePage : ReactiveWindow<HomePageViewModel<HomePa
     }
   }
 
+  public static void ShowMessage(IUserMessage message) => _homePage?.ShowMessageHandler(message);
   private void DrawerList_KeyUp(object sender, KeyEventArgs e)
   {
     if (e.Key == Key.Space || e.Key == Key.Enter)
@@ -134,6 +140,10 @@ internal sealed partial class HomePage : ReactiveWindow<HomePageViewModel<HomePa
   }
   void PageActivated(CompositeDisposable disposables)
   {
+    var topLevel = GetTopLevel(this);
+    _manager = new WindowNotificationManager(topLevel) { MaxItems = 5, Position = NotificationPosition.BottomRight, Opacity = 0.8, };
+    _homePage = this;
+
     var pgTitle = this.FindControl<TextBlock>("TxbPageTitle");
     ApplicationModelBase.PageTitle
     .Subscribe(x =>
@@ -145,5 +155,30 @@ internal sealed partial class HomePage : ReactiveWindow<HomePageViewModel<HomePa
       });
     })
     .DisposeWith(disposables);
+  }
+
+  private void ShowMessageHandler(IUserMessage message)
+  {
+    try
+    {
+      NotificationType notificationType = message.MessageType switch
+      {
+        Business.MessageType.Normal => NotificationType.Information,
+        Business.MessageType.Error => NotificationType.Error,
+        Business.MessageType.Warning => NotificationType.Warning,
+        Business.MessageType.Success => NotificationType.Success,
+        _ => NotificationType.Information
+      };
+
+      Dispatcher.UIThread.Invoke(() =>
+      {
+        try
+        {
+           _manager?.Show(new Notification(message.MessageTitle, message.Message, notificationType, TimeSpan.FromSeconds(30), null, null));
+        }
+        catch { }
+      });
+    }
+    catch { }
   }
 }

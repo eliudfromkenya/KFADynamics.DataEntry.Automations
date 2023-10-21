@@ -27,6 +27,7 @@
             <GradientStop Offset="1" Color="{DynamicResource MaterialDesignSilverGrayColor}" />
         </LinearGradientBrush>
         <converters2:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <converters2:MessageColorConverter x:Key="MessageColorConverter" />
         <converters:CustomBoxShadowsConverter x:Key="CustomBoxShadowsConverter" />
         <converters2:BitmapAssetValueConverter x:Key="variableImage" />
         <system:String x:Key="BoxShadowsTemplate">-5 -5 20 {MaterialDesignShadowLightColor}, 5 5 20 {MaterialDesignShadowDarkColor}</system:String>
@@ -103,7 +104,6 @@
                 </Style>
             </ProgressBar.Styles>
         </ProgressBar>
-        
 
         <controls:Card
             Grid.Row="1"
@@ -245,18 +245,18 @@
                     UseFloatingWatermark="True" />
             </StackPanel>
         </controls:Card>
-        
-         <CheckBox
-                Grid.Column="1" Grid.Row="1"  Opacity="0.7"
-                Content="Automatically post data" VerticalAlignment="Bottom"
-                IsChecked="{Binding PostRecordsAfterProcessing}"
-                ToolTip.Tip="Check if to post data after transfering to Dynamics" />
 
-         <CheckBox  Opacity="0.7"
-                Grid.Column="4" Grid.Row="1"
-                Content="Generate post precessing report" VerticalAlignment="Bottom"
-                IsChecked="{Binding GenerateAfterProcessReport}"
-                ToolTip.Tip="Check if to generate post-report after processing, to show the progress of procedure" />
+        <CheckBox
+               Grid.Column="1" Grid.Row="1"  Opacity="0.7"
+               Content="Automatically post data" VerticalAlignment="Bottom"
+               IsChecked="{Binding PostRecordsAfterProcessing}"
+               ToolTip.Tip="Check if to post data after transfering to Dynamics" />
+
+        <CheckBox  Opacity="0.7"
+               Grid.Column="4" Grid.Row="1"
+               Content="Generate post precessing report" VerticalAlignment="Bottom"
+               IsChecked="{Binding GenerateAfterProcessReport}"
+               ToolTip.Tip="Check if to generate post-report after processing, to show the progress of procedure" />
 
         <Grid
             Grid.Row="2"
@@ -367,9 +367,9 @@
                    Source="avares://KFADynamics.DataEntry.Automations/Assets/KFADynamics.png" />
             <StackPanel HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-                 <TextBlock HorizontalAlignment="Center" Margin="0"  Foreground="{Binding UserMessage.ForeColor}" Classes="Headline4 Subheadline2" Text="{Binding UserMessage.MessageTitle}" />
-                 <TextBlock HorizontalAlignment="Center"  Margin="0" Foreground="{Binding UserMessage.ForeColor}" Classes="Headline5 Subheadline2" Text="{Binding UserMessage.Message}" />
-                 <TextBlock HorizontalAlignment="Center"  Margin="0" Foreground="{Binding UserMessage.ForeColor}" Classes="Headline6 Subheadline2" Text="{Binding UserMessage.MessageDetails}" />
+                <TextBlock HorizontalAlignment="Center" Margin="0" Foreground="{Binding UserMessage.MessageType, Converter={StaticResource MessageColorConverter}}" Classes="Headline4 Subheadline2" Text="{Binding UserMessage.MessageTitle}" />
+                <TextBlock HorizontalAlignment="Center"  Margin="0"  Foreground="{Binding UserMessage.MessageType, Converter={StaticResource MessageColorConverter}}" Classes="Headline5 Subheadline2" Text="{Binding UserMessage.Message}" />
+                <TextBlock HorizontalAlignment="Center"  Margin="0"  Foreground="{Binding UserMessage.MessageType, Converter={StaticResource MessageColorConverter}}" Classes="Headline6 Subheadline2" Text="{Binding UserMessage.MessageDetails}" />
             </StackPanel>
         </Grid>
         <Slider  Opacity="0.7"
