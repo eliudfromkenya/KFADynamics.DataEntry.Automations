@@ -1,0 +1,95 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="using:System">
+
+  <!-- KFADynamics theme ko / should be removed -->
+  
+  
+  <Design.PreviewWith>
+    <Border Padding="20" Height="500">
+      <StackPanel Spacing="20" VerticalAlignment="Center">
+        <DatePicker />
+        <DatePicker CornerRadius="10" />
+        <DatePicker IsEnabled="False" />
+        <DatePicker>
+          <DataValidationErrors.Error>
+            <sys:Exception>
+              <x:Arguments>
+                <x:String>Error</x:String>
+              </x:Arguments>
+            </sys:Exception>
+          </DataValidationErrors.Error>
+        </DatePicker>
+      </StackPanel>
+    </Border>
+  </Design.PreviewWith>
+
+
+  
+  <ControlTheme x:Key="{x:Type DatePicker}" TargetType="DatePicker">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="Black" />
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <Grid Name="LayoutRoot" Margin="{TemplateBinding Padding}">
+            <Button Name="PART_FlyoutButton" IsVisible="False"
+                    Foreground="{TemplateBinding Foreground}"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    IsEnabled="{TemplateBinding IsEnabled}"
+                    MinWidth="{DynamicResource DatePickerThemeMinWidth}"
+                    MaxWidth="{DynamicResource DatePickerThemeMaxWidth}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    TemplatedControl.IsTemplateFocusTarget="True">
+              <Grid Name="PART_ButtonContentGrid" ColumnDefinitions="78*,Auto,132*,Auto,78*">
+                <TextBlock Name="PART_DayTextBlock" Text="day" HorizontalAlignment="Center"
+                           Padding="{DynamicResource DatePickerHostPadding}"
+                           FontFamily="{TemplateBinding FontFamily}"
+                           FontWeight="{TemplateBinding FontWeight}"
+                           FontSize="{TemplateBinding FontSize}"/>
+                <TextBlock Name="PART_MonthTextBlock" Text="month" TextAlignment="Left"
+                           Padding="{DynamicResource DatePickerHostMonthPadding}"
+                           FontFamily="{TemplateBinding FontFamily}"
+                           FontWeight="{TemplateBinding FontWeight}"
+                           FontSize="{TemplateBinding FontSize}"/>
+                <TextBlock Name="PART_YearTextBlock" Text="year" HorizontalAlignment="Center"
+                           Padding="{DynamicResource DatePickerHostPadding}"
+                           FontFamily="{TemplateBinding FontFamily}"
+                           FontWeight="{TemplateBinding FontWeight}"
+                           FontSize="{TemplateBinding FontSize}"/>
+                <Rectangle x:Name="PART_FirstSpacer"
+                      Fill="Transparent"
+                      HorizontalAlignment="Center"
+                      Width="1"
+                      Grid.Column="1" />
+                <Rectangle x:Name="PART_SecondSpacer"
+                      Fill="Transparent"
+                      HorizontalAlignment="Center"
+                      Width="1"
+                      Grid.Column="3" />
+              </Grid>
+            </Button>
+
+            <Popup Name="PART_Popup" WindowManagerAddShadowHint="False" IsVisible="False"
+                   IsLightDismissEnabled="True" PlacementTarget="{TemplateBinding}"
+                   Placement="Bottom">
+            </Popup>
+
+            <TextBlock Text="Please use ExtendedCalendarDatePicker instead of DatePicker !"/>
+
+          </Grid>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  
+
+</ResourceDictionary>

@@ -1,0 +1,273 @@
+﻿<ResourceDictionary
+      xmlns="https://github.com/avaloniaui"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ripple="clr-namespace:Avalonia.Themes.KFADynamics.Controls.Ripple"
+      xmlns:assist="clr-namespace:Avalonia.Themes.KFADynamics.Assist"
+      xmlns:system="clr-namespace:System;assembly=netstandard"
+      xmlns:converters="clr-namespace:Avalonia.Themes.KFADynamics.Converters">
+
+  <!-- KFADynamics theme ok -->
+  
+  
+  <Design.PreviewWith>
+    <Border Padding="20">
+      <StackPanel Spacing="20">
+        <TabItem Header="Leaf" />
+        <TabItem Header="Arch" IsSelected="True" />
+      </StackPanel>
+    </Border>
+  </Design.PreviewWith>
+
+
+  <SolidColorBrush x:Key="TabItemHeaderBackgroundSelected" Color="Transparent" />
+  <SolidColorBrush x:Key="TabItemHeaderForegroundSelected" Color="Black" />
+  <SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPointerOver" Color="Transparent"/>
+  <SolidColorBrush x:Key="TabItemHeaderForegroundUnselectedPointerOver" Color="Black"/>
+  <SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPointerOver" Color="Transparent"/>
+  <SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPointerOver" Color="Black"/>
+  <SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPressed" Color="Transparent"/>
+  <SolidColorBrush x:Key="TabItemHeaderForegroundUnselectedPressed" Color="Black"/>
+  <SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPressed" Color="Transparent"/>
+  <SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPressed" Color="Black"/>
+  <SolidColorBrush x:Key="TabItemHeaderBackgroundDisabled" Color="Transparent"/>
+  <SolidColorBrush x:Key="TabItemHeaderForegroundDisabled" Color="#FFCCCCCC"/>
+  
+  
+  <ControlTheme x:Key="{x:Type TabItem}" TargetType="TabItem">
+    <Setter Property="FontSize" Value="14"/>
+    <Setter Property="FontWeight" Value="Normal" />
+    <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+    <Setter Property="Foreground" Value="{DynamicResource MaterialDesignForeground}" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="Height" Value="NaN" />
+    <Setter Property="assist:TabControlAssist.TabHeight" Value="42" />
+    <Setter Property="assist:TabControlAssist.SelectedTabHeight" Value="52" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="assist:TabControlAssist.UseHighlightStroke" Value="False" />
+    <Setter Property="assist:TabControlAssist.HighlightStrokeSize" Value="4" />
+    <Setter Property="assist:TabControlAssist.HighlightStrokeBrush" Value="{DynamicResource PrimaryHueLightBrush}" />
+    
+    
+    <Setter Property="Template">
+      <ControlTemplate>
+          <Border
+              Name="PART_LayoutRoot"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              Height="{TemplateBinding assist:TabControlAssist.TabHeight}"
+              VerticalAlignment="Bottom"
+              Padding="{TemplateBinding Padding}">
+            <Panel>
+              <ContentPresenter
+                  Name="PART_ContentPresenter"
+                  Margin="0"
+                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                  Content="{TemplateBinding Header}"
+                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                  FontFamily="{TemplateBinding FontFamily}"
+                  FontSize="{TemplateBinding FontSize}"
+                  FontWeight="{TemplateBinding FontWeight}" />
+              <Border Name="PART_SelectedPipe" Margin="0" CornerRadius="0"/>
+            </Panel>
+          </Border>
+      </ControlTemplate>
+    </Setter>
+
+    <!--Default state-->
+    <Style Selector="^ /template/ Border#PART_LayoutRoot">
+      <Setter Property="BoxShadow">
+        <Setter.Value>
+          <MultiBinding Converter="{StaticResource AutoBoxShadowsConverter}" ConverterParameter="0">
+            <Binding Path="Height" RelativeSource="{RelativeSource TemplatedParent}"/>
+            <DynamicResource ResourceKey="MaterialDesignShadowLightColor" />
+            <DynamicResource ResourceKey="MaterialDesignShadowDarkColor" />
+          </MultiBinding>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!--  Selected state  -->
+    <!--  We don't use selector to PART_LayoutRoot, so developer can override selected item background with TabStripItem.Background  -->
+    <Style Selector="^:selected">
+      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelected}" />
+      <Setter Property="Foreground" Value="{DynamicResource TabItemHeaderForegroundSelected}" />
+    </Style>
+    
+    <Style Selector="^:selected /template/ Border#PART_SelectedPipe">
+      <Setter Property="IsVisible" Value="{TemplateBinding assist:TabControlAssist.UseHighlightStroke}" />
+      <Setter Property="Background" Value="{TemplateBinding assist:TabControlAssist.HighlightStrokeBrush}" />
+    </Style>
+    
+    
+    
+    <!--  Selected state  -->
+    <Style Selector="^:selected /template/ Border#PART_LayoutRoot">
+      <Setter Property="BoxShadow">
+        <Setter.Value>
+          <MultiBinding Converter="{StaticResource AutoBoxShadowsConverter}" ConverterParameter="1">
+            <Binding Path="Height" RelativeSource="{RelativeSource TemplatedParent}"/>
+            <DynamicResource ResourceKey="MaterialDesignShadowLightColor" />
+            <DynamicResource ResourceKey="MaterialDesignShadowDarkColor" />
+          </MultiBinding>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style Selector="^:selected:not(.Button) /template/ Border#PART_LayoutRoot">
+      <Setter Property="Height" Value="{TemplateBinding assist:TabControlAssist.SelectedTabHeight}"/>
+    </Style>
+
+
+    <!--  PointerOver state  -->
+    <Style Selector="^:pointerover /template/ Border#PART_LayoutRoot">
+      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselectedPointerOver}" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPointerOver}" />
+      <Setter Property="BoxShadow">
+        <Setter.Value>
+          <MultiBinding Converter="{StaticResource AutoBoxShadowsConverter}" ConverterParameter="1">
+            <Binding Path="Height" RelativeSource="{RelativeSource TemplatedParent}"/>
+            <DynamicResource ResourceKey="MaterialDesignShadowLightColor" />
+            <DynamicResource ResourceKey="MaterialDesignShadowDarkColor" />
+          </MultiBinding>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!--  Selected PointerOver state  -->
+    <Style Selector="^:selected:pointerover /template/ Border#PART_LayoutRoot">
+      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelectedPointerOver}" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPointerOver}" />
+    </Style>
+
+    <!--  Pressed state  -->
+    <Style Selector="^:pressed /template/ Border#PART_LayoutRoot">
+      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundUnselectedPressed}" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundUnselectedPressed}" />
+    </Style>
+    
+    
+
+
+    <!--  Selected Pressed state  -->
+    <Style Selector="^:selected:pressed /template/ Border#PART_LayoutRoot">
+      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundSelectedPressed}" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundSelectedPressed}" />
+    </Style>
+
+    <!--  Disabled state  -->
+    <Style Selector="^:disabled /template/ Border#PART_LayoutRoot">
+      <Setter Property="Background" Value="{DynamicResource TabItemHeaderBackgroundDisabled}" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource TabItemHeaderForegroundDisabled}" />
+    </Style>
+    
+    
+
+    <!--  TabStripPlacement Top  -->
+    <Style Selector="^[TabStripPlacement=Top] /template/ Border#PART_SelectedPipe">
+      <Setter Property="Height" Value="{TemplateBinding assist:TabControlAssist.HighlightStrokeSize}" />
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="VerticalAlignment" Value="Bottom" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Top] /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Margin" Value="20,0,20,0" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Top]:not(.Button) /template/ Border#PART_LayoutRoot">
+      <Setter Property="Margin" Value="10,10,10,0"/>
+      <Setter Property="VerticalAlignment" Value="Bottom"/>
+      <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource CustomCornerRadiusConverter}, ConverterParameter=100%|100%|0%|0%}" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Top].Button /template/ Border#PART_LayoutRoot">
+      <Setter Property="Margin" Value="10"/>
+      <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource CustomCornerRadiusConverter}, ConverterParameter=100%|100%|100%|100%}" />
+    </Style>
+
+
+    <!--  TabStripPlacement Bottom  -->
+    <Style Selector="^[TabStripPlacement=Bottom] /template/ Border#PART_SelectedPipe">
+      <Setter Property="Height" Value="{TemplateBinding assist:TabControlAssist.HighlightStrokeSize}" />
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Bottom] /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Margin" Value="20,0,20,0" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Bottom]:not(.Button) /template/ Border#PART_LayoutRoot">
+      <Setter Property="Margin" Value="10,0,10,0"/>
+      <Setter Property="VerticalAlignment" Value="Top"/>
+      <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource CustomCornerRadiusConverter}, ConverterParameter=0%|0%|100%|100%}" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Bottom].Button /template/ Border#PART_LayoutRoot">
+      <Setter Property="Margin" Value="10"/>
+      <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource CustomCornerRadiusConverter}, ConverterParameter=100%|100%|100%|100%}" />
+    </Style>
+
+
+
+    <!--  TabStripPlacement Left  -->
+    <Style Selector="^[TabStripPlacement=Left] /template/ Border#PART_SelectedPipe">
+      <Setter Property="Width" Value="{TemplateBinding assist:TabControlAssist.HighlightStrokeSize}" />
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="HorizontalAlignment" Value="Right" />
+      <Setter Property="VerticalAlignment" Value="Stretch" />
+    </Style>
+    
+    <Style Selector="^[TabStripPlacement=Left] /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Margin" Value="20,0,20,0" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Left]:not(.Button) /template/ Border#PART_LayoutRoot">
+      <Setter Property="Margin" Value="8"/>
+      <Setter Property="HorizontalAlignment" Value="Right"/>
+      <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource CustomCornerRadiusConverter}, ConverterParameter=100%|0%|0%|100%}" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Left].Button /template/ Border#PART_LayoutRoot">
+      <Setter Property="Margin" Value="10"/>
+      <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource CustomCornerRadiusConverter}, ConverterParameter=100%|100%|100%|100%}" />
+    </Style>
+
+
+
+
+
+
+
+
+    <!--  TabStripPlacement Right  -->
+    <Style Selector="^[TabStripPlacement=Right] /template/ Border#PART_SelectedPipe">
+      <Setter Property="Width" Value="{TemplateBinding assist:TabControlAssist.HighlightStrokeSize}" />
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="HorizontalAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Stretch" />
+    </Style>
+    
+    <Style Selector="^[TabStripPlacement=Right] /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Margin" Value="20,0,20,0" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Right]:not(.Button) /template/ Border#PART_LayoutRoot">
+      <Setter Property="Margin" Value="8"/>
+      <Setter Property="HorizontalAlignment" Value="Left"/>
+      <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource CustomCornerRadiusConverter}, ConverterParameter=0%|100%|100%|0%}" />
+    </Style>
+
+    <Style Selector="^[TabStripPlacement=Right].Button /template/ Border#PART_LayoutRoot">
+      <Setter Property="Margin" Value="10"/>
+      <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={StaticResource CustomCornerRadiusConverter}, ConverterParameter=100%|100%|100%|100%}" />
+    </Style>
+  </ControlTheme>
+</ResourceDictionary>
+

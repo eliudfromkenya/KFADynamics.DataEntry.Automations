@@ -1,0 +1,119 @@
+﻿<Styles
+  xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:converters="clr-namespace:Avalonia.Themes.KFADynamics.Converters">
+
+	<Styles.Resources>
+        <ResourceDictionary>
+
+
+			<converters:AutoBoxShadowsConverter x:Key="AutoBoxShadowsConverter" />
+            <converters:ControlHeightToCornerRadiusConverter x:Key="ControlHeightToCornerRadiusConverter" />
+            <converters:WidthMinusValueConverter x:Key="WidthMinusValueConverter" />
+            <converters:WidthToRenderTransformConverter x:Key="WidthToRenderTransformConverter" />
+            <converters:StringReplaceConverter x:Key="StringReplaceConverter" />
+            <converters:BrushRoundConverter x:Key="BrushRoundConverter" />
+            <converters:DoubleToLeftRightCornerRadiusConverter x:Key="DoubleToLeftRightCornerRadiusConverter" />
+            <converters:RectangleHollowGeometryConverter x:Key="RectangleHollowGeometry" />
+            <converters:GetPlatformHotkeyConfigServiceConverter x:Key="GetPlatformHotkeyConfig" />
+            <converters:BooleanValueToDoubleConverter x:Key="BooleanValueToDoubleConverter" />
+            <converters:ComboboxHeightToFloatingWatermarkMarginConverter x:Key="ComboboxHeightToFloatingWatermarkMarginConverter" />
+            <converters:HeightToMarginConverter x:Key="HeightToMarginConverter" />
+            <converters:WidthToCustomValueConverter x:Key="WidthToCustomValueConverter" />
+            <converters:AutoCorrectPositionConverter x:Key="AutoCorrectPositionConverter"/>
+            <converters:MarginMultiplyConverter x:Key="MarginCreator" />
+            <converters:HeightToCornerRadiusConverter x:Key="HeightToCornerRadiusConverter"/>
+            <converters:RangeToSweepConverter x:Key="RangeToSweep" />
+            <converters:MultiWidthMinusValueConverter x:Key="MultiWidthMinusValueConverter" />
+            <converters:ThicknessToIntConverter x:Key="ThicknessToIntConverter" />
+            <converters:HeightToThicknessConverter x:Key="HeightToThicknessConverter" />
+            <converters:CustomCornerRadiusConverter x:Key="CustomCornerRadiusConverter" />
+            <converters:TestConverter x:Key="TestConverter" />
+
+			
+			
+
+         
+          <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/MaterialInternalIcon.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/AdornerLayer.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TextBlock.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Button.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/RadioButton.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Expander.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ProgressBar.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/AutoCompleteBox.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ButtonSpinner.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Calendar.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/CalendarButton.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/CalendarDatePicker.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/CalendarDayButton.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/CalendarItem.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/CaptionButtons.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Carousel.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/CheckBox.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/FlyoutPresenter.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/GridSplitter.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ItemsControl.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Label.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ListBox.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ListBoxItem.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/MenuScrollViewer.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Menu.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/MenuItem.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/MenuFlyoutPresenter.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/NativeMenuBar.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/NotificationCard.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/NumericUpDown.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/OverlayPopupHost.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/PopupRoot.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/PathIcon.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/RepeatButton.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ScrollBar.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ScrollViewer.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Separator.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/SplitButton.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/SplitView.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TabControl.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TabItem.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TabStrip.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TabStripItem.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TextBox.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ToggleButton.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ToggleSwitch.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ToolTip.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TitleBar.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TransitioningContentControl.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TreeView.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TreeViewItem.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/WindowNotificationManager.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Window.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ComboBox.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ComboBoxItem.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ContentControl.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ContextMenu.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/DataValidationErrors.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/DateTimePickerShared.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/DatePicker.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/TimePicker.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/DropDownButton.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/EmbeddableControlRoot.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Slider.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ManagedFileChooser.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/SelectableTextBlock.xaml"/>
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/RefreshContainer.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/RefreshVisualizer.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ThemeVariantScope.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/Card.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/SnackbarHost.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/NavigationDrawer.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/ColorZone.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/FloatingButton.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/MaterialUnderline.xaml" />
+                <MergeResourceInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/CircularProgress.xaml" />
+          </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <StyleInclude Source="avares://Avalonia.Themes.KFADynamics/Themes/UserControl.xaml" />
+</Styles>

@@ -1,0 +1,419 @@
+<UserControl
+    x:Class="KFADynamics.DataEntry.Automations.Pages.EntryHome"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:assist="clr-namespace:Avalonia.Themes.KFADynamics.Assist;assembly=Avalonia.Themes.KFADynamics"
+    xmlns:controls="clr-namespace:Avalonia.Themes.KFADynamics.Controls;assembly=Avalonia.Themes.KFADynamics"
+    xmlns:converters="clr-namespace:Avalonia.Themes.KFADynamics.Converters;assembly=Avalonia.Themes.KFADynamics"
+    xmlns:converters2="using:KFADynamics.DataEntry.Automations.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fullpanels="clr-namespace:KFADynamics.DataEntry.Automations.Pages.Panels"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:p1="clr-namespace:Avalonia.Themes.KFADynamics.Assist;assembly=Avalonia.Themes.KFADynamics"
+    xmlns:services="clr-namespace:KFADynamics.DataEntry.Business;assembly=KFADynamics.DataEntry.Business"
+    xmlns:pages="clr-namespace:KFADynamics.DataEntry.Automations.Pages"
+    xmlns:vms="clr-namespace:KFADynamics.DataEntry.Automations.Pages.ViewModels"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:CompileBindings="True"
+    x:DataType="vms:EntryHomeViewModel"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="MaterialDesignLinearGradient1" StartPoint="0%,0%" EndPoint="0%,100%">
+            <GradientStop Offset="0" Color="Transparent" />
+            <GradientStop Offset="1" Color="{DynamicResource MaterialDesignSilverGrayColor}" />
+        </LinearGradientBrush>
+        <converters2:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <converters:CustomBoxShadowsConverter x:Key="CustomBoxShadowsConverter" />
+        <converters2:BitmapAssetValueConverter x:Key="variableImage" />
+        <system:String x:Key="BoxShadowsTemplate">-5 -5 20 {MaterialDesignShadowLightColor}, 5 5 20 {MaterialDesignShadowDarkColor}</system:String>
+    </UserControl.Resources>
+
+    <!--  Full UI panel samples  -->
+    <Grid
+        Margin="3"
+        ColumnDefinitions="10,Auto,*,*,Auto,10"
+        RowDefinitions="10,Auto,Auto,Auto,Auto,*,Auto,10">
+        <ProgressBar
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="296"
+            Height="296"  Opacity="0.7"
+            BorderThickness="8"
+            Foreground="#FF5cbcd6"
+            Theme="{StaticResource ProgressBarCircle}"
+            ToolTip.Tip="Short processes indicator"
+            Value="{Binding MiniProgress}">
+            <ProgressBar.Styles>
+                <Style Selector="ProgressBar">
+                    <Setter Property="assist:ProgressBarAssist.CircularInnerContent">
+                        <Setter.Value>
+                            <Template>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock
+                                        Width="100"
+                                        FontSize="34"
+                                        Text="{Binding $parent[ProgressBar].Value, StringFormat={}{0}%}"
+                                        TextAlignment="Center" />
+                                    <icons:MaterialIcon
+                                        Width="60"
+                                        Height="60"
+                                        Kind="{Binding MiniProgressKind}" />
+                                </StackPanel>
+                            </Template>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ProgressBar.Styles>
+        </ProgressBar>
+
+        <ProgressBar
+            Grid.Row="1"
+            Grid.Column="4"
+            Width="296"  Opacity="0.7"
+            Height="296"
+            Foreground="Gray"
+            Theme="{StaticResource ProgressBarCircleOutline}"
+            ToolTip.Tip="Long process indicator"
+            Value="{Binding Progress}">
+            <ProgressBar.Styles>
+                <Style Selector="ProgressBar">
+                    <Setter Property="assist:ProgressBarAssist.CircularInnerContent">
+                        <Setter.Value>
+                            <Template>
+                                <TextBlock
+                                    Width="100"
+                                    FontSize="34"
+                                    Text="{Binding $parent[ProgressBar].Value, StringFormat={}{0}%}"
+                                    TextAlignment="Center" />
+                            </Template>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                                <GradientStop Offset="0" Color="#FF5cbcd6" />
+                                <GradientStop Offset="1" Color="#FF77dbf0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ProgressBar.Styles>
+        </ProgressBar>
+        
+
+        <controls:Card
+            Grid.Row="1"
+            Grid.Column="2"
+            MinWidth="250"
+            MinHeight="240"
+            Margin="5"
+            VerticalAlignment="Stretch"
+            Theme="{StaticResource CardOutset}"
+            ToolTip.Tip="Type of documents to transfer eg if cash sales or purchases">
+            <StackPanel Margin="0,4">
+                <TextBlock
+                    HorizontalAlignment="Center"  Opacity="0.7"
+                    Classes="Headline6"
+                    Text="Documents Type" />
+                <RadioButton
+                    assist:SelectionControlAssist.Foreground="#FF5cbcd6"
+                    assist:SelectionControlAssist.InnerForeground="Green"
+                    assist:SelectionControlAssist.InnerSize="16"
+                    assist:SelectionControlAssist.Size="24"
+                    BorderBrush="White"
+                    BorderThickness="1"
+                    Content="Count Sheets"
+                    FontSize="32"
+                    Foreground="Gray"
+                    GroupName="5"
+                    IsChecked="{Binding DocumentType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static services:DocumentType.CountSheets}}"
+                    ToolTip.Tip="Transfer stock valuation (physical stock count)" />
+
+                <RadioButton
+                    assist:SelectionControlAssist.Foreground="#FF5cbcd6"
+                    assist:SelectionControlAssist.InnerForeground="Green"
+                    assist:SelectionControlAssist.InnerSize="16"
+                    assist:SelectionControlAssist.Size="24"
+                    BorderBrush="White"
+                    BorderThickness="1"
+                    Content="Purchases"
+                    FontSize="32"
+                    Foreground="Gray"
+                    GroupName="5"
+                    IsChecked="{Binding DocumentType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static services:DocumentType.Purchases}}"
+                    ToolTip.Tip="Transfer 40's (sales stocks purchases)" />
+
+                <RadioButton
+                    assist:SelectionControlAssist.Foreground="#FF5cbcd6"
+                    assist:SelectionControlAssist.InnerForeground="Green"
+                    assist:SelectionControlAssist.InnerSize="16"
+                    assist:SelectionControlAssist.Size="24"
+                    BorderBrush="White"
+                    BorderThickness="1"
+                    Content="Cash Sales"
+                    FontSize="32"
+                    Foreground="Gray"
+                    GroupName="5"
+                    IsChecked="{Binding DocumentType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static services:DocumentType.Sales}}"
+                    ToolTip.Tip="Transfer cash sales" />
+
+                <RadioButton
+                    assist:SelectionControlAssist.Foreground="#FF5cbcd6"
+                    assist:SelectionControlAssist.InnerForeground="Green"
+                    assist:SelectionControlAssist.InnerSize="16"
+                    assist:SelectionControlAssist.Size="24"
+                    BorderBrush="White"
+                    BorderThickness="1"
+                    Content="Petty Cash"
+                    FontSize="32"
+                    Foreground="Gray"
+                    IsChecked="{Binding DocumentType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static services:DocumentType.PettyCash}}"
+                    GroupName="5"
+                    ToolTip.Tip="Transfer petty cash" />
+
+                <RadioButton
+                    assist:SelectionControlAssist.Foreground="#FF5cbcd6"
+                    assist:SelectionControlAssist.InnerForeground="Green"
+                    assist:SelectionControlAssist.InnerSize="16"
+                    assist:SelectionControlAssist.Size="24"
+                    BorderBrush="White"
+                    BorderThickness="1"
+                    Content="Account Payables (Cheques)"
+                    FontSize="28"
+                    Foreground="Gray"
+                    IsChecked="{Binding DocumentType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static services:DocumentType.Cheques}}"
+                    GroupName="5"
+                    ToolTip.Tip="Transfer cheque payments (account payables)" />
+
+                <RadioButton
+                    assist:SelectionControlAssist.Foreground="#FF5cbcd6"
+                    assist:SelectionControlAssist.InnerForeground="Green"
+                    assist:SelectionControlAssist.InnerSize="16"
+                    assist:SelectionControlAssist.Size="24"
+                    BorderBrush="White"
+                    BorderThickness="1"
+                    Content="Cash Receipts (505's)"
+                    FontSize="28"
+                    IsChecked="{Binding DocumentType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static services:DocumentType.Recievables}}"
+                    Foreground="Gray"
+                    GroupName="5"
+                    ToolTip.Tip="Transfer cash receipts (account receivables)" />
+            </StackPanel>
+        </controls:Card>
+
+        <controls:Card
+            Grid.Row="1"
+            Grid.Column="3"
+            MinWidth="250"
+            MinHeight="240"
+            Margin="5"
+            VerticalAlignment="Stretch"
+            Theme="{StaticResource CardOutset}"
+            ToolTip.Tip="Filters for data to transfer">
+            <StackPanel Margin="0,4">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Classes="Headline6"  Opacity="0.7"
+                    Text="Filters" />
+                <TextBox
+                    assist:TextFieldAssist.Label="Months to process"
+                    Text="{Binding Months}"
+                    Theme="{StaticResource TextBoxOutline}"
+                    ToolTip.Tip="Enter months to transfer"
+                    UseFloatingWatermark="True" />
+                <TextBox
+                    assist:TextFieldAssist.Label="Branch codes to process"
+                    Text="{Binding BranchCodes}"
+                    Theme="{StaticResource TextBoxOutline}"
+                    ToolTip.Tip="Enter branch codes to transfer"
+                    UseFloatingWatermark="True" />
+                <TextBox
+                    assist:TextFieldAssist.Label="Batch numbers to process"
+                    Text="{Binding BatchNumbers}"
+                    Theme="{StaticResource TextBoxOutline}"
+                    ToolTip.Tip="Batchkeys or branch number of the documents to transfer"
+                    UseFloatingWatermark="True" />
+                <TextBox
+                    assist:TextFieldAssist.Label="Document numbers to process"
+                    Text="{Binding DocumentNumbers}"  IsVisible="{Binding HasDocuments}"
+                    Theme="{StaticResource TextBoxOutline}"
+                    ToolTip.Tip="Please enter document numbers to transfer"
+                    UseFloatingWatermark="True" />
+            </StackPanel>
+        </controls:Card>
+        
+         <CheckBox
+                Grid.Column="1" Grid.Row="1"  Opacity="0.7"
+                Content="Automatically post data" VerticalAlignment="Bottom"
+                IsChecked="{Binding PostRecordsAfterProcessing}"
+                ToolTip.Tip="Check if to post data after transfering to Dynamics" />
+
+         <CheckBox  Opacity="0.7"
+                Grid.Column="4" Grid.Row="1"
+                Content="Generate post precessing report" VerticalAlignment="Bottom"
+                IsChecked="{Binding GenerateAfterProcessReport}"
+                ToolTip.Tip="Check if to generate post-report after processing, to show the progress of procedure" />
+
+        <Grid
+            Grid.Row="2"
+            Grid.Column="1"
+            Grid.ColumnSpan="4"
+            Margin="5"
+            HorizontalAlignment="Stretch"
+            ColumnDefinitions="Auto,Auto,*,*,*,*,*,*,*,*">
+            <TextBox
+                Width="120"
+                HorizontalAlignment="Stretch"
+                assist:TextFieldAssist.Label="Pages to open"
+                Text="{Binding NumberOfPagesToEmploy}"
+                Theme="{StaticResource TextBoxOutline}"
+                ToolTip.Tip="Please select page numbers to use for data entry"
+                UseFloatingWatermark="True" />
+
+            <CheckBox
+                Grid.Column="1"
+                Content="Change User Branch"  Opacity="0.7"
+                IsChecked="{Binding ChangeUserBranchCodeToMatchDocumentsBranch}"
+                ToolTip.Tip="Check if to change branch code of user data entry to match documents" />
+
+            <Button
+                Grid.Column="4"
+                Height="40"
+                Margin="3"
+                HorizontalAlignment="Stretch"
+                Classes="Accent"
+                Content="Process"
+                Command="{Binding ProcessCommand}"
+                Foreground="Gray"
+                Theme="{StaticResource ButtonOutline}"
+                ToolTip.Tip="Click to process the documents transfer" />
+
+            <Button
+                Grid.Column="5"
+                Height="40"
+                Margin="3"
+                HorizontalAlignment="Stretch"
+                Classes="Accent"
+                Content="Cancel"
+                Command="{Binding CancelCommand}"
+                Foreground="Gray"
+                Theme="{StaticResource ButtonOutline}"
+                ToolTip.Tip="Click to cancel current ongoing data transfer" />
+
+            <Button
+                Grid.Column="6"
+                Width="110"
+                Height="40"
+                Margin="3"
+                HorizontalAlignment="Stretch"
+                Classes="Accent"
+                Content="Harmonize"
+                Command="{Binding HarmonizeCommand}"
+                Foreground="Gray"
+                Theme="{StaticResource ButtonOutline}"
+                ToolTip.Tip="Harmonize current codes" />
+
+            <Button
+                Grid.Column="7"
+                Width="110"
+                Height="40"
+                Margin="3"
+                HorizontalAlignment="Stretch"
+                Classes="Accent"
+                Content="Processed"
+                Command="{Binding ProcessedCommand}"
+                Foreground="Gray"
+                Theme="{StaticResource ButtonOutline}"
+                ToolTip.Tip="Load already transfer documents" />
+
+            <Button
+                Grid.Column="8"
+                Height="40"
+                Margin="3"
+                HorizontalAlignment="Stretch"
+                Classes="Accent"
+                Content="Pending"
+                Command="{Binding PendingCommand}"
+                Foreground="Gray"
+                Theme="{StaticResource ButtonOutline}"
+                ToolTip.Tip="Load all pending records to transfer" />
+
+            <Button
+                Grid.Column="9"
+                Height="40"
+                Margin="3"
+                HorizontalAlignment="Stretch"
+                Classes="Accent"
+                Command="{Binding CloseCommand}"
+                Content="Close"
+                Foreground="Gray"
+                Theme="{StaticResource ButtonOutline}"
+                ToolTip.Tip="Click to close to application" />
+        </Grid>
+
+        <Grid  Grid.Row="5"
+            Grid.Column="1"
+            Grid.ColumnSpan="4"
+            Margin="5" Opacity=".7"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+            <Image HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch"
+                   Opacity=".1"
+                   Source="avares://KFADynamics.DataEntry.Automations/Assets/KFADynamics.png" />
+            <StackPanel HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+                 <TextBlock HorizontalAlignment="Center" Margin="0"  Foreground="{Binding UserMessage.ForeColor}" Classes="Headline4 Subheadline2" Text="{Binding UserMessage.MessageTitle}" />
+                 <TextBlock HorizontalAlignment="Center"  Margin="0" Foreground="{Binding UserMessage.ForeColor}" Classes="Headline5 Subheadline2" Text="{Binding UserMessage.Message}" />
+                 <TextBlock HorizontalAlignment="Center"  Margin="0" Foreground="{Binding UserMessage.ForeColor}" Classes="Headline6 Subheadline2" Text="{Binding UserMessage.MessageDetails}" />
+            </StackPanel>
+        </Grid>
+        <Slider  Opacity="0.7"
+            Name="Slider4"
+            Grid.Row="4"
+            Grid.Column="1"
+            Grid.ColumnSpan="4"
+            Height="40"
+            MinWidth="800"
+            Margin="1"
+            HorizontalAlignment="Stretch"
+            assist:SliderAssist.ThumbForeground="#FF5cbcd6"
+            Theme="{StaticResource SliderHorizontal}"
+            TickFrequency="25"
+            ToolTip.Tip="Overall transfer progress"
+            Value="{Binding MainProgress}">
+            <Slider.Styles>
+                <Style Selector="Slider:horizontal">
+                    <Setter Property="Foreground">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,0%">
+                                <GradientStop Offset="0" Color="#FF77dbf0" />
+                                <GradientStop Offset="0.8" Color="#FF5cbcd6" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style Selector="Slider:horizontal">
+                    <Setter Property="assist:SliderAssist.ThumbContent">
+                        <Setter.Value>
+                            <Template>
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    FontSize="20"
+                                    Foreground="White"
+                                    Text="{Binding $parent[Slider].Value, StringFormat=\{0:N0\}, FallbackValue=0}"
+                                    TextAlignment="Center" />
+                            </Template>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Slider.Styles>
+        </Slider>
+    </Grid>
+</UserControl>

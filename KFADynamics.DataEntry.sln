@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Themes", "Themes", "{C448C412-7439-485B-9CAB-AAEEBD1F4194}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.Themes.KFADynamics", "Avalonia.Themes.KFADynamics\Avalonia.Themes.KFADynamics.csproj", "{82F70D7C-162F-4D92-8976-2EB9B45DE164}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KFADynamics.DataEntry.Automations", "KFADynamics.DataEntry.Automations\KFADynamics.DataEntry.Automations.csproj", "{066725D4-7330-4437-9025-5BA06A8F03E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFADynamics.DataEntry.Business", "KFADynamics.DataEntry.Business\KFADynamics.DataEntry.Business.csproj", "{4A0414D1-04B5-43C5-8DF1-52F37904501B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82F70D7C-162F-4D92-8976-2EB9B45DE164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82F70D7C-162F-4D92-8976-2EB9B45DE164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82F70D7C-162F-4D92-8976-2EB9B45DE164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82F70D7C-162F-4D92-8976-2EB9B45DE164}.Release|Any CPU.Build.0 = Release|Any CPU
+		{066725D4-7330-4437-9025-5BA06A8F03E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066725D4-7330-4437-9025-5BA06A8F03E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066725D4-7330-4437-9025-5BA06A8F03E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066725D4-7330-4437-9025-5BA06A8F03E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A0414D1-04B5-43C5-8DF1-52F37904501B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A0414D1-04B5-43C5-8DF1-52F37904501B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A0414D1-04B5-43C5-8DF1-52F37904501B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A0414D1-04B5-43C5-8DF1-52F37904501B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{82F70D7C-162F-4D92-8976-2EB9B45DE164} = {C448C412-7439-485B-9CAB-AAEEBD1F4194}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E7112F2A-E8C2-4BD4-BA4F-413BCBC3C55A}
+	EndGlobalSection
+EndGlobal

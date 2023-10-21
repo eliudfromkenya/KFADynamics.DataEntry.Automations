@@ -1,0 +1,263 @@
+<Window
+    x:Class="KFADynamics.DataEntry.Automations.Windows.HomePage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:assist="clr-namespace:Avalonia.Themes.KFADynamics.Assist;assembly=Avalonia.Themes.KFADynamics"
+    xmlns:controls="clr-namespace:Avalonia.Themes.KFADynamics.Controls;assembly=Avalonia.Themes.KFADynamics"
+    xmlns:converters="clr-namespace:Avalonia.Themes.KFADynamics.Converters;assembly=Avalonia.Themes.KFADynamics"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:localcontrols="clr-namespace:KFADynamics.DataEntry.Automations.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:KFADynamics.DataEntry.Automations.Pages"
+    xmlns:showMeTheXaml="clr-namespace:ShowMeTheXaml;assembly=ShowMeTheXaml.Avalonia"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:viewModels1="clr-namespace:KFADynamics.DataEntry.Automations.Windows.ViewModels"
+    Title=" "
+    Width="1280"
+    Height="720"
+    MinWidth="720"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:CompileBindings="True"
+    x:DataType="viewModels1:ApplicationModelBase"
+    Icon="avares://KFADynamics.DataEntry.Automations/Assets/app.ico"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Window.Styles>
+        <Style Selector="TextBlock.Subheadline">
+            <Setter Property="Margin" Value="0, 16" />
+        </Style>
+        <Style Selector="TextBlock.Subheadline2">
+            <Setter Property="Margin" Value="0, 8" />
+        </Style>
+        <Style Selector="TextBlock.Content">
+            <Setter Property="Margin" Value="0, 4" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+    </Window.Styles>
+
+    <Window.Resources>
+        <converters:CustomBoxShadowsConverter x:Key="CustomBoxShadowsConverter" />
+        <system:String x:Key="BoxShadowsTemplate">-5 -5 20 {MaterialDesignShadowLightColor}, 5 5 20 {MaterialDesignShadowDarkColor}</system:String>
+    </Window.Resources>
+
+    <dialogHostAvalonia:DialogHost Identifier="MainDialogHost">
+        <controls:SnackbarHost
+            assist:SnackbarHostAssist.SnackbarWidth="600"
+            HostName="Root"
+            SnackbarHorizontalAlignment="Center"
+            TemplateApplied="TemplatedControl_OnTemplateApplied">
+            <controls:NavigationDrawer
+                Name="LeftDrawer"
+                Classes="permanent"
+                LeftDrawerExpandThresholdWidth="2000"
+                LeftDrawerOpened="{Binding ElementName=NavDrawerSwitch2, Path=IsChecked, Mode=TwoWay}"
+                LeftDrawerWidth="320"
+                RightDrawerOpened="False"
+                RightDrawerWidth="0">
+                <controls:NavigationDrawer.LeftDrawerContent>
+                    <Grid RowDefinitions="Auto,*">
+                        <controls:ColorZone
+                            Grid.Row="0"
+                            Height="210"
+                            Mode="Custom">
+                            <Image
+                                Width="320"
+                                Height="210"
+                                Margin="0,0,0,8"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Opacity="1"
+                                Source="avares://KFADynamics.DataEntry.Automations/Assets/Banner.png"
+                                Stretch="Fill" />
+                        </controls:ColorZone>
+                        <ListBox
+                            Name="DrawerList2"
+                            Grid.Row="1"
+                            Focusable="{Binding ElementName=LeftDrawer, Path=LeftDrawerOpened}">
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Height" Value="48" />
+                                    <Setter Property="Padding" Value="16,0" />
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    <Setter Property="IsEnabled" Value="{Binding $self.IsEnabled}" />
+                                </Style>
+                            </ListBox.Styles>
+                            <ListBoxItem IsEnabled="True">
+                                <StackPanel Orientation="Horizontal">
+                                    <icons:MaterialIcon
+                                        Width="24"
+                                        Height="24"
+                                        VerticalAlignment="Center"
+                                        Foreground="Gray"
+                                        Kind="HomeOutline" />
+                                    <TextBlock
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="Home" />
+                                </StackPanel>
+                            </ListBoxItem>
+
+                            <ListBoxItem IsEnabled="True">
+                                <StackPanel Orientation="Horizontal">
+                                    <icons:MaterialIcon
+                                        Width="24"
+                                        Height="24"
+                                        VerticalAlignment="Center"
+                                        Foreground="Gray"
+                                        Kind="ButtonPointer" />
+                                    <TextBlock
+                                        Margin="8,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="About Us" />
+                                </StackPanel>
+                            </ListBoxItem>
+                        </ListBox>
+                    </Grid>
+                </controls:NavigationDrawer.LeftDrawerContent>
+                <DockPanel LastChildFill="true">
+                    <controls:ColorZone
+                        Name="PART_AppBarContainer"
+                        Height="60"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        assist:ShadowAssist.ShadowDepth="Depth3"
+                        Background="Transparent"
+                        DockPanel.Dock="Top"
+                        Mode="Standard"
+                        ZIndex="1">
+                        <Grid Margin="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="40" />
+                            </Grid.ColumnDefinitions>
+                            <!--  Left side menu  -->
+                            <ToggleButton
+                                Name="NavDrawerSwitch2"
+                                Width="38"
+                                Height="38"
+                                Padding="4"
+                                Classes="Flat TransparentBack"
+                                CornerRadius="6">
+                                <icons:MaterialIcon
+                                    Width="28"
+                                    Height="28"
+                                    Foreground="{DynamicResource MaterialDesignForeground}"
+                                    Kind="Menu"
+                                    UseLayoutRounding="False" />
+                            </ToggleButton>
+                            <!--  App title  -->
+                            <controls:SkiaText
+                                Grid.Column="1"
+                                Width="350"
+                                Height="30"
+                                Margin="30,3,3,3"
+                                Classes="Headline6"
+                                ClipToBounds="False"
+                                Fill="{DynamicResource MaterialDesignPaper}"
+                                FontFamily="avares://KFADynamics.DataEntry.Automations/Assets/Fonts/Cocogoose Pro-trial.ttf#Cocogoose"
+                                FontSize="24"
+                                Stretch="None" HorizontalAlignment="Center"
+                                Stroke="SkyBlue"
+                                StrokeThickness="1"
+                                Text="KFA Dynamics Data Entry">
+                                <controls:SkiaGeometry.BoxShadow>
+                                    <MultiBinding Converter="{StaticResource CustomBoxShadowsConverter}">
+                                        <DynamicResource ResourceKey="BoxShadowsTemplate" />
+                                        <DynamicResource ResourceKey="MaterialDesignShadowLightColor" />
+                                        <DynamicResource ResourceKey="MaterialDesignShadowDarkColor" />
+                                    </MultiBinding>
+                                </controls:SkiaGeometry.BoxShadow>
+                            </controls:SkiaText>
+
+                            <TextBlock x:Name="TxbPageTitle" Opacity="0.7" Grid.Column="2"  Margin="10,3,3,3" Text="{Binding PageTitle^}" FontWeight="ExtraBold" FontSize="24" />
+                            <!--  Theme toggle switch  -->
+                            <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                <ToggleSwitch
+                                    Name="toggleSwitchTheme"
+                                    Command="{Binding Path=SwitchThemeCommand}"
+                                    CommandParameter="{Binding ElementName=toggleSwitchTheme, Path=$self.IsChecked}"
+                                    Content="Light theme"
+                                    IsChecked="False"
+                                    OffContent="Light theme"
+                                    OnContent="Dark theme" />
+                            </StackPanel>
+                            <!--  <Right side menu  -->
+                            <Menu
+                                Grid.Column="5"
+                                Height="32"
+                                Margin="0"
+                                Padding="0">
+                                <MenuItem
+                                    Width="32"
+                                    Height="32"
+                                    assist:MenuAssist.HorizontalOffset="-140"
+                                    assist:MenuAssist.PopupAnchor="TopRight"
+                                    assist:MenuAssist.VerticalOffset="10"
+                                    CornerRadius="6"
+                                    Header="{icons:MaterialIconExt DotsVertical,
+                                                                   Size=24}">
+                                    <MenuItem Click="HelloButtonMenuItem_OnClick" Header="Hello !">
+                                        <MenuItem.Icon>
+                                            <icons:MaterialIcon
+                                                Width="24"
+                                                Height="24"
+                                                Kind="Hand" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator />
+                                    <MenuItem
+                                        Command="{Binding HelpAboutMethod}"
+                                        Header="About"
+                                        IsEnabled="{Binding AboutEnabled}" />
+                                    <Separator />
+                                    <MenuItem Click="GoodbyeButtonMenuItem_OnClick" Header="Goodbye">
+                                        <MenuItem.Icon>
+                                            <icons:MaterialIcon
+                                                Width="24"
+                                                Height="24"
+                                                Kind="ExitRun" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuItem>
+                            </Menu>
+                        </Grid>
+                    </controls:ColorZone>
+                    <ScrollViewer
+                        Name="mainScroller2"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        DockPanel.Dock="Top"
+                        HorizontalScrollBarVisibility="Disabled">
+                        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Carousel Name="PageCarousel2" HorizontalAlignment="Stretch">
+                                <Carousel.Styles>
+                                    <Style Selector="Carousel#PageCarousel2:not(.no-transitions)">
+                                        <Setter Property="PageTransition">
+                                            <PageSlide
+                                                SlideInEasing="CircularEaseOut"
+                                                SlideOutEasing="CircularEaseOut"
+                                                Duration="0.25" />
+                                        </Setter>
+                                    </Style>
+                                </Carousel.Styles>
+                                <!--  Main page  -->
+                                <pages:EntryHome />
+                                <!--  Buttons  -->
+                                <pages:AboutPage />
+                            </Carousel>
+                        </Border>
+                    </ScrollViewer>
+                </DockPanel>
+            </controls:NavigationDrawer>
+        </controls:SnackbarHost>
+    </dialogHostAvalonia:DialogHost>
+</Window>
