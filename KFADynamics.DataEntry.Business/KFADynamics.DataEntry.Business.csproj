@@ -7,6 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\SQLs\CashReceipts.sql" />
+    <None Remove="Resources\SQLs\CashSales.sql" />
+    <None Remove="Resources\SQLs\CountSheets.sql" />
+    <None Remove="Resources\SQLs\PaidCheques.sql" />
+    <None Remove="Resources\SQLs\PettyCash.sql" />
+    <None Remove="Resources\SQLs\Purchases.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SQLs\PaidCheques.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SQLs\CashReceipts.sql" />
+    <EmbeddedResource Include="Resources\SQLs\CashSales.sql" />
+    <EmbeddedResource Include="Resources\SQLs\CountSheets.sql" />
+    <EmbeddedResource Include="Resources\SQLs\PettyCash.sql" />
+    <EmbeddedResource Include="Resources\SQLs\Purchases.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EPPlus" Version="6.2.10" />
     <PackageReference Include="MonkeyCache.LiteDB" Version="2.0.1" />
     <PackageReference Include="MySqlConnector" Version="2.2.7" />
