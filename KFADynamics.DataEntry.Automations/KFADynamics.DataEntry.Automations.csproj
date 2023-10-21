@@ -66,6 +66,9 @@
 	  <!--Condition below is needed to generate macOS App only.-->
 	  <PackageReference Include="Dotnet.Bundle" Version="0.9.13" Condition="$(RuntimeIdentifier.StartsWith('osx'))" />
 	  <PackageReference Include="Material.Icons.Avalonia" Version="2.0.1" />
+	  <PackageReference Include="MonkeyCache.LiteDB" Version="2.0.1" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="SharpZipLib" Version="1.4.2" />
 	  <PackageReference Include="ShowMeTheXaml.Avalonia" Version="1.4.1" />
 	  <PackageReference Include="ShowMeTheXaml.Avalonia.Generator" Version="1.4.1" />
   </ItemGroup>

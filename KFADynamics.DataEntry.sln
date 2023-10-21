@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.Themes.KFADynamics
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KFADynamics.DataEntry.Automations", "KFADynamics.DataEntry.Automations\KFADynamics.DataEntry.Automations.csproj", "{066725D4-7330-4437-9025-5BA06A8F03E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFADynamics.DataEntry.Business", "KFADynamics.DataEntry.Business\KFADynamics.DataEntry.Business.csproj", "{4A0414D1-04B5-43C5-8DF1-52F37904501B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KFADynamics.DataEntry.Business", "KFADynamics.DataEntry.Business\KFADynamics.DataEntry.Business.csproj", "{4A0414D1-04B5-43C5-8DF1-52F37904501B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFADynamics.DataEntry.Playwright", "KFADynamics.DataEntry.Playwright\KFADynamics.DataEntry.Playwright.csproj", "{79BD6671-BE92-4719-9B60-8353DA8A09DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KFADynamics.DataEntry.Tests", "KFADynamics.DataEntry.Tests\KFADynamics.DataEntry.Tests.csproj", "{20B63CD3-A1E9-4A3D-978D-C2530099EFC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +33,14 @@ Global
 		{4A0414D1-04B5-43C5-8DF1-52F37904501B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A0414D1-04B5-43C5-8DF1-52F37904501B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A0414D1-04B5-43C5-8DF1-52F37904501B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79BD6671-BE92-4719-9B60-8353DA8A09DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79BD6671-BE92-4719-9B60-8353DA8A09DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79BD6671-BE92-4719-9B60-8353DA8A09DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79BD6671-BE92-4719-9B60-8353DA8A09DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20B63CD3-A1E9-4A3D-978D-C2530099EFC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20B63CD3-A1E9-4A3D-978D-C2530099EFC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20B63CD3-A1E9-4A3D-978D-C2530099EFC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20B63CD3-A1E9-4A3D-978D-C2530099EFC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

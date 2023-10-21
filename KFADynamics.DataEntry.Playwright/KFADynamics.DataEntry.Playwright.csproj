@@ -7,16 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="6.2.10" />
+    <PackageReference Include="Microsoft.Playwright" Version="1.39.0" />
     <PackageReference Include="MonkeyCache.LiteDB" Version="2.0.1" />
-    <PackageReference Include="MySqlConnector" Version="2.2.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="System.Reactive" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\KFADynamics.DataEntry.Playwright\KFADynamics.DataEntry.Playwright.csproj" />
   </ItemGroup>
 
 </Project>
