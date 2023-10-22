@@ -7,14 +7,14 @@ public static class Service
 {
   public static IProcessingData? ProcessingData { get; set; }
 
-  public static Task Cancel(ErrorHandler errorHandler)
+  public static async Task Cancel(ErrorHandler errorHandler)
   {
-    throw new NotImplementedException();
+    // throw new NotImplementedException();
   }
 
-  public static Task PendingRecords(ErrorHandler errorHandler)
+  public static async Task PendingRecords(ErrorHandler errorHandler)
   {
-    throw new NotImplementedException();
+    // throw new NotImplementedException();
   }
 
   public static async Task ProcessRecords(ErrorHandler errorHandler)
@@ -42,8 +42,8 @@ public static class Service
     });
   }
 
-  public static Task ProcessedRecords(ErrorHandler errorHandler)
+  public static async Task ProcessedRecords(ErrorHandler errorHandler)
   {
-    throw new NotImplementedException();
+    // throw new NotImplementedException();
   }
 }

@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       mc:Ignorable="d" MinWidth="600" MinHeight="150"
+        x:Class="KFADynamics.DataEntry.Automations.Pages.PromptBox">
+
+    <Border BorderThickness="3" Margin="5" BorderBrush="Gray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="10" >
+        <StackPanel HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Classes="Headline4 Subheadline2" Name="Title" Text="Pilgrims Projects Assistant System"/>
+            <TextBlock HorizontalAlignment="Center" Foreground="SkyBlue" TextWrapping="Wrap" Classes="Headline5 Subheadline2" Name="Text"/>
+            <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Classes="Headline6 Subheadline2" Name="Details"/>
+            <TextBox Name="TxtAnswer" IsVisible="False" HorizontalAlignment="Center"
+                 Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap"
+                 Grid.Row="1" MinWidth="250" ></TextBox>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Name="Buttons">
+                <StackPanel.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Margin" Value="30,5"/>
+                        <Setter Property="Foreground" Value="SkyBlue"/>
+                        <Setter Property="Theme" Value="{StaticResource ButtonOutline}"/>
+                    </Style>
+                </StackPanel.Styles>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

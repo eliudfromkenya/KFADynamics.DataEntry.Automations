@@ -114,7 +114,11 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
 
   public BehaviorSubject<bool> CanPending { get; } = new(false);
 
-  private async Task PendingClicked() => await Service.PendingRecords(CurrentErrorHandler);
+  private async Task PendingClicked() 
+  {
+    var result = await DialogsManager.ShowMessage("Data trefbdajkdf dbvkbvksdj cxjlhcvad\n a) vhzjfhfjkdadf\n  b) fdhsdjkfdfsdf\n c)dfvfvafauhildf", "fdhyfuaba jsdh;sd", "gjhfk fahdfhgasdffjkl dfiasgdl", PromptBoxButtons.Open | PromptBoxButtons.Continue| PromptBoxButtons.Cancel, PromptBoxButtons.Cancel);
+    await Service.PendingRecords(CurrentErrorHandler);
+  }
 
   public BehaviorSubject<bool> CanProcess { get; } = new(false);
 
@@ -167,6 +171,7 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
         DocumentType.Purchases => "Working on stock purchases - 40's",
         DocumentType.PettyCash => "Working on petty cash payments",
         DocumentType.Cheques => "Working on cheque payments - AP",
+        DocumentType.GeneralJournals => "Working on general journals",
         DocumentType.Recievables => "Working on cash receipts - 505's",
         _ => "Unable to recognize documents being worked on",
       };
@@ -267,11 +272,11 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
         MainProgress = message.OverallProgress;
         MiniProgressKind = message.ProcessingState switch
         {
-          ProcessingState.GettingData => MaterialIconKind.AllInclusive,
-          ProcessingState.HarmonizingData => MaterialIconKind.BookSearch,
-          ProcessingState.PreProcessing => MaterialIconKind.ArrangeBringForward,
-          ProcessingState.PostProcessing => MaterialIconKind.TrackChanges,
-          ProcessingState.Finalizing => MaterialIconKind.CameraIris,
+          ProcessingState.GettingData => MaterialIconKind.ArrowBottomBoldCircleOutline,
+          ProcessingState.HarmonizingData => MaterialIconKind.AxisZRotateClockwise,
+          ProcessingState.PreProcessing => MaterialIconKind.BasketFill,
+          ProcessingState.PostProcessing => MaterialIconKind.BasketUnfill,
+          ProcessingState.Finalizing => MaterialIconKind.WindElectricityOutline,
           _ => MaterialIconKind.BikeFast,
         };
 

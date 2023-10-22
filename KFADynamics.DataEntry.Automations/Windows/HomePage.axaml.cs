@@ -11,6 +11,7 @@ using Avalonia.Styling;
 using Avalonia.Themes.KFADynamics.Controls;
 using Avalonia.Threading;
 using KFADynamics.DataEntry.Automations.Interfaces;
+using KFADynamics.DataEntry.Automations.Models;
 using KFADynamics.DataEntry.Automations.Windows.ViewModels;
 using KFADynamics.DataEntry.Business;
 using ReactiveUI;
@@ -52,6 +53,8 @@ internal sealed partial class HomePage : ReactiveWindow<HomePageViewModel<HomePa
   Size IMainWindow.ClientSize => this.ClientSize;
   Size? IMainWindow.FrameSize => this.FrameSize;
   WindowState IMainWindow.State => this.WindowState;
+
+  internal static HomePage Page { get => _homePage; }
 
   private void InitializeComponent(IMainWindow window)
   {
@@ -111,7 +114,7 @@ internal sealed partial class HomePage : ReactiveWindow<HomePageViewModel<HomePa
     }
   }
 
-  public static void ShowMessage(IUserMessage message) => _homePage?.ShowMessageHandler(message);
+  public static void ShowMessage(IUserMessage message) => Page?.ShowMessageHandler(message);
   private void DrawerList_KeyUp(object sender, KeyEventArgs e)
   {
     if (e.Key == Key.Space || e.Key == Key.Enter)
@@ -143,6 +146,18 @@ internal sealed partial class HomePage : ReactiveWindow<HomePageViewModel<HomePa
     var topLevel = GetTopLevel(this);
     _manager = new WindowNotificationManager(topLevel) { MaxItems = 5, Position = NotificationPosition.BottomRight, Opacity = 0.8, };
     _homePage = this;
+    DialogsManager.DialogHost = this.FindControl<global::DialogHostAvalonia.DialogHost>("MainDialogHost");
+    DialogsManager.ErrorHandler = (message, title, ex) =>
+    {
+      ShowMessage(new UserMessage
+      {
+        Message = message,
+        MessageTitle = title,
+        MessageType = MessageType.Error,
+        Time = DateTime.Now,
+        MessageDetails = "Dialog message error"
+      });
+    };
 
     var pgTitle = this.FindControl<TextBlock>("TxbPageTitle");
     ApplicationModelBase.PageTitle

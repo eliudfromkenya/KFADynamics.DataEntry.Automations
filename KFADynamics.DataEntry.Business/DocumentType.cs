@@ -7,5 +7,6 @@ public enum DocumentType
   Purchases = 2,
   PettyCash = 3,
   Cheques = 4,
-  Recievables = 5
+  Recievables = 5,
+  GeneralJournals = 6
 }

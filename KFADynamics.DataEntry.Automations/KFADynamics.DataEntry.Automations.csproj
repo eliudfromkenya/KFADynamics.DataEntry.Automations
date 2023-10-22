@@ -46,6 +46,7 @@
     <AvaloniaResource Include="Assets/**" />
     <AvaloniaResource Include="Images/**" />
     <AdditionalFiles Remove="Pages\AboutPage.axaml" />
+    <AdditionalFiles Remove="Pages\EntryHome.axaml" />
     <AdditionalFiles Remove="Windows\AboutWindow.axaml" />
     <None Remove="Assets\Banner.png" />	  
     <None Update="Assets/app.icns" CopyToPublishDirectory="PreserveNewest" Condition="$(RuntimeIdentifier.StartsWith('osx'))">
@@ -103,6 +104,14 @@
   </PropertyGroup>
   <ItemGroup>
     <UpToDateCheckInput Remove="KFADynamicsXamlDisplay.axaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaXaml Update="Pages\ClosableDialogPage.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Pages\PromptBox.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
   </ItemGroup>
   <ItemGroup>
     <AvaloniaXaml Update="Pages\AboutPage.axaml">

@@ -44,7 +44,7 @@
         <system:String x:Key="BoxShadowsTemplate">-5 -5 20 {MaterialDesignShadowLightColor}, 5 5 20 {MaterialDesignShadowDarkColor}</system:String>
     </Window.Resources>
 
-    <dialogHostAvalonia:DialogHost Identifier="MainDialogHost">
+    <dialogHostAvalonia:DialogHost x:Name="MainDialogHost" Identifier="MainDialogHost">
         <controls:SnackbarHost
             assist:SnackbarHostAssist.SnackbarWidth="600"
             HostName="Root"

@@ -150,7 +150,7 @@ internal static class ProcessingServices
       MiniProgress = 0,
       OverallProgress = 0,
       Progress = 0,
-      ProcessingState = ProcessingState.GettingData
+      ProcessingState = ProcessingState.PostProcessing
     });
 
     for (var i = 0; i < 100; i++)
