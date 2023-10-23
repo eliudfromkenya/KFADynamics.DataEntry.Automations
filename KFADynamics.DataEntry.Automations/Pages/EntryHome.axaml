@@ -167,7 +167,7 @@
                     assist:SelectionControlAssist.InnerSize="16"
                     assist:SelectionControlAssist.Size="24"
                     BorderBrush="White" Margin="5,3"
-                    BorderThickness="1" 
+                    BorderThickness="1"
                     Content="Petty Cash"
                     FontSize="32"
                     Foreground="Gray"
@@ -238,7 +238,17 @@
                     Text="{Binding Months}"
                     Theme="{StaticResource TextBoxOutline}"
                     ToolTip.Tip="Enter months to transfer"
+                    IsVisible="{Binding HasMonths}"
                     UseFloatingWatermark="True" />
+                 <controls:ExtendedCalendarDatePicker 
+                     Watermark="Count sheets dates" 
+                     UseFloatingWatermark="True"
+                     SelectedDateFormat="Short" 
+                     SelectedDate="{Binding Date}"  
+                     IsVisible="{Binding HasDate}"
+                     Margin="0,15,0,15" 
+                     IsTodayHighlighted="True" 
+                     ToolTip.Tip="Select date of count sheet to transfer" />
                 <TextBox
                     assist:TextFieldAssist.Label="Branch codes to process"
                     Text="{Binding BranchCodes}"

@@ -8,7 +8,7 @@ IF
 		cost_centre_code VARCHAR ( 5 ) NOT NULL,
 		general_ledger_detail_id VARCHAR ( 25 ) NOT NULL,
 		document_number VARCHAR ( 8 ) NOT NULL,
-		`dynamics_invoice_number` VARCHAR ( 15 ) NULL,
+		`dynamics_document_number` VARCHAR ( 15 ) NULL,
 		`state` TINYINT NULL,
 		`narration` VARCHAR ( 255 ) NULL,
 		`time` TIMESTAMP NOT NULL DEFAULT NOW(),

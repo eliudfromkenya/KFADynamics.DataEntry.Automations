@@ -1,34 +1,20 @@
 ﻿using System.Data;
+using KFA.ItemCodes.Classes;
+using KFADynamics.DataEntry.Business.Classes;
+using KFADynamics.DataEntry.Business.DataServices;
 using KFADynamics.DataEntry.Business.Delegates;
 using KFADynamics.DataEntry.Business.Models;
 
 namespace KFADynamics.DataEntry.Business;
 
 internal static class ProcessingServices
-{
-  private static DataTable GetData(IProcessingData processingData)
+{  
+  private static DataSet GetData(IProcessingData processingData)
   {
-    ProgressMessage progressMessage = default;
-    processingData?.ReportProgress(progressMessage = new ProgressMessage
-    {
-      Message = "Retrieving data from internal KFA system",
-      MessageTitle = "Fetching Records",
-      MiniProgress = 0,
-      OverallProgress = 0,
-      Progress = 0,
-      ProcessingState = ProcessingState.GettingData
-    });
-
-    for (var i = 0; i < 100; i++)
-    {
-      progressMessage = progressMessage with { MiniProgress = (i * 7) % 100, OverallProgress = 1 * i / 6, Progress = i };
-      processingData?.ReportProgress(progressMessage!);
-      Thread.Sleep(100);
-    }
-    return new DataTable();
+    return FetchData.GetData(processingData);    
   }
 
-  private static void CheckData(IProcessingData processingData, DataTable table)
+  private static void CheckData(IProcessingData processingData, DataSet ds)
   {
     ProgressMessage progressMessage = default;
     processingData?.ReportProgress(progressMessage = new ProgressMessage
@@ -49,7 +35,7 @@ internal static class ProcessingServices
     }
   }
 
-  private static void Preprocess(IProcessingData processingData, DataTable table)
+  private static void Preprocess(IProcessingData processingData, DataSet ds)
   {
     ProgressMessage progressMessage = default;
     processingData?.ReportProgress(progressMessage = new ProgressMessage
@@ -70,7 +56,7 @@ internal static class ProcessingServices
     }
   }
 
-  private static void ProcessRecords(IProcessingData processingData, DataTable table)
+  private static void ProcessRecords(IProcessingData processingData, DataSet ds)
   {
     ProgressMessage progressMessage = default;
     processingData?.ReportProgress(progressMessage = new ProgressMessage
@@ -91,7 +77,7 @@ internal static class ProcessingServices
     }
   }
 
-  private static void Finalize(IProcessingData processingData, DataTable table)
+  private static void Finalize(IProcessingData processingData, DataSet ds)
   {
     ProgressMessage progressMessage = default;
     processingData?.ReportProgress(progressMessage = new ProgressMessage
@@ -120,12 +106,12 @@ internal static class ProcessingServices
         try
         {
           processingData.IsBusy = true;
-          using var table = GetData(processingData);
-          CheckData(processingData, table);
-          Preprocess(processingData, table);
-          ProcessRecords(processingData, table);
-          Postprocess(processingData, table);
-          Finalize(processingData, table);
+          using var ds = GetData(processingData);
+          CheckData(processingData, ds);
+          Preprocess(processingData, ds);
+          ProcessRecords(processingData, ds);
+          Postprocess(processingData, ds);
+          Finalize(processingData, ds);
           processingData.IsBusy = false;
 
           processingData.ReportProgress(new ProgressMessage { });
@@ -140,7 +126,7 @@ internal static class ProcessingServices
       }, errorHandler));
   }
 
-  private static void Postprocess(IProcessingData processingData, DataTable table)
+  private static void Postprocess(IProcessingData processingData, DataSet ds)
   {
     ProgressMessage progressMessage = default;
     processingData?.ReportProgress(progressMessage = new ProgressMessage

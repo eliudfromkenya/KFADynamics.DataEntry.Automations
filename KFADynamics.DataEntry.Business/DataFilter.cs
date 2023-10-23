@@ -7,4 +7,5 @@ public readonly struct DataFilter
   public string[]? BatchKeys { get; }
   public string[]? BatchNumbers { get; }
   public string[]? DocumentNumbers { get; }
+  public DateTime? Date { get; }
 }

@@ -1,12 +1,12 @@
 ﻿CREATE TABLE IF NOT EXISTS `tbl_dynamics_cash_sales`  (
-  `id` int UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
 	batch_key  varchar(15) NOT NULL,
 	batch_month varchar(8) NOT NULL, 
 	batch_number varchar(5) NOT NULL, 
 	cost_centre_code varchar(5) NOT NULL, 
 	cash_sale_id varchar(25) NOT NULL, 
 	cash_sale_number varchar(8) NOT NULL,	
-  `dynamics_invoice_number` varchar(15) NULL,
+  `dynamics_cash_sale_number` varchar(15) NULL,
   `state` tinyint NULL,
   `narration` varchar(255) NULL,
 	`time` timestamp NOT NULL DEFAULT NOW(),
@@ -56,6 +56,8 @@ CREATE TABLE IF NOT EXISTS `tbl_dynamics_suppliers`  (
 
 
 DROP TABLE IF EXISTS tmp_processed_cash_sales_ids;
+DROP TABLE IF EXISTS tmp_current_stock_item_codes;
+
 CREATE TEMPORARY TABLE tmp_processed_cash_sales_ids AS SELECT cash_sale_id FROM tbl_dynamics_cash_sales;
 DROP TABLE
 IF

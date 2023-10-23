@@ -22,6 +22,9 @@ public interface IProcessingData
   bool GenerateAfterProcessReport { get; set; }
   ICommand HarmonizeCommand { get; }
   bool HasDocuments { get; set; }
+  bool HasMonths { get; set; }
+  bool HasDate { get; set; }
+  DateTime Date { get; set; }
   double MainProgress { get; set; }
   double MiniProgress { get; set; }
   string Months { get; set; }

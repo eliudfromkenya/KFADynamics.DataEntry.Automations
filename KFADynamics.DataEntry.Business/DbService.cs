@@ -3,7 +3,7 @@ using MySqlConnector;
 
 namespace KFA.ItemCodes.Classes;
 
-internal static class DbService
+public static class DbService
 {
   public static string? user = null;
   public static string ConnectionString { get; set; } = string.Empty;
@@ -17,6 +17,7 @@ internal static class DbService
     var dbCommand = con.CreateCommand();
     dbCommand.CommandText = sql;
     dbCommand.CommandType = CommandType.Text;
+    dbCommand.CommandTimeout = 3000;
     if (parameters?.Any() ?? false)
       dbCommand.Parameters.AddRange(parameters);
 

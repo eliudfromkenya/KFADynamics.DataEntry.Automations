@@ -6,9 +6,9 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia.Controls.Notifications;
 using Avalonia.Media;
 using Avalonia.Threading;
+using KFA.ItemCodes.Classes;
 using KFADynamics.DataEntry.Automations.Converters;
 using KFADynamics.DataEntry.Automations.Models;
 using KFADynamics.DataEntry.Automations.Windows;
@@ -18,7 +18,6 @@ using KFADynamics.DataEntry.Business.Classes;
 using KFADynamics.DataEntry.Playwright.Models;
 using Material.Icons;
 using ReactiveUI;
-using Tmds.DBus.Protocol;
 using MessageType = KFADynamics.DataEntry.Business.MessageType;
 
 namespace KFADynamics.DataEntry.Automations.Pages.ViewModels;
@@ -45,6 +44,9 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
   public bool IsBusy { get => _isBusy; set => this.RaiseAndSetIfChanged(ref _isBusy, value); }
   public IUserMessage UserMessage { get => _userMessage; set => this.RaiseAndSetIfChanged(ref _userMessage, value); }
   public bool HasDocuments { get => _hasDocuments; set => this.RaiseAndSetIfChanged(ref _hasDocuments, value); }
+  public bool HasMonths { get => _hasMonths; set => this.RaiseAndSetIfChanged(ref _hasMonths, value); }
+  public bool HasDate { get => _hasDate; set => this.RaiseAndSetIfChanged(ref _hasDate, value); }
+  public DateTime Date { get => _date; set => this.RaiseAndSetIfChanged(ref _date, value); }
   public bool GenerateAfterProcessReport { get => _generateAfterProcessReport; set => this.RaiseAndSetIfChanged(ref _generateAfterProcessReport, value); }
   public bool PostRecordsAfterProcessing { get => _postRecordsAfterProcessing; set => this.RaiseAndSetIfChanged(ref _postRecordsAfterProcessing, value); }
   public string SubBackgroundImage { get => _subBackgroundImage; set => _subBackgroundImage = value; }
@@ -92,6 +94,7 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
         var localCacheConnectionString = SecretAppsettingReader.ReadConfig("ConnectionStrings:LocalCache");
         var encryptionKey = SecretAppsettingReader.ReadConfig("ApplicationKeys:EncryptionKey1");
         LocalCache.ConnectionString = localCacheConnectionString;
+        DbService.ConnectionString = dbConnectionString;
 
         UserSecretes = new UserSecretes
         {
@@ -114,9 +117,9 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
 
   public BehaviorSubject<bool> CanPending { get; } = new(false);
 
-  private async Task PendingClicked() 
+  private async Task PendingClicked()
   {
-    var result = await DialogsManager.ShowMessage("Data trefbdajkdf dbvkbvksdj cxjlhcvad\n a) vhzjfhfjkdadf\n  b) fdhsdjkfdfsdf\n c)dfvfvafauhildf", "fdhyfuaba jsdh;sd", "gjhfk fahdfhgasdffjkl dfiasgdl", PromptBoxButtons.Open | PromptBoxButtons.Continue| PromptBoxButtons.Cancel, PromptBoxButtons.Cancel);
+    var result = await DialogsManager.ShowMessage("Data trefbdajkdf dbvkbvksdj cxjlhcvad\n a) vhzjfhfjkdadf\n  b) fdhsdjkfdfsdf\n c)dfvfvafauhildf", "fdhyfuaba jsdh;sd", "gjhfk fahdfhgasdffjkl dfiasgdl", PromptBoxButtons.Open | PromptBoxButtons.Continue | PromptBoxButtons.Cancel, PromptBoxButtons.Cancel);
     await Service.PendingRecords(CurrentErrorHandler);
   }
 
@@ -176,6 +179,8 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
         _ => "Unable to recognize documents being worked on",
       };
       HasDocuments = new[] { DocumentType.Sales, DocumentType.Purchases, DocumentType.CountSheets }.Contains(x);
+      HasMonths = x != DocumentType.CountSheets;
+      HasDate = x == DocumentType.CountSheets; ;
       UserMessage = default;
       ApplicationModelBase.PageTitle.OnNext(mainHeader);
     }).DisposeWith(disposables);
@@ -223,13 +228,14 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
   private bool _isBusy;
 
   public void ShowMessage(IUserMessage message) => HomePage.ShowMessage(message);
+
   public void NotifyMessage(IUserMessage message)
   {
     Dispatcher.UIThread.Invoke(() =>
     {
       try
       {
-        _time = DateTime.Now;   
+        _time = DateTime.Now;
         UserMessage = new UserMessage
         {
           ForeColor = MessageColorConverter.ConvertColor(message.MessageType),
@@ -249,16 +255,17 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
             if (_time == userMsg.Time)
               UserMessage = new UserMessage();
           }
-        });        
+        });
       }
       catch { }
     });
   }
 
-  
-
   private static Task _messageTask = null;
   private UserSecretes _userSecretes;
+  private bool _hasMonths;
+  private bool _hasDate;
+  private DateTime _date = new(2022, 6, 30);
 
   public void ReportProgress(IProgressMessage message)
   {
