@@ -28,19 +28,6 @@ CREATE TABLE IF NOT EXISTS `tbl_dynamics_stock_items`  (
   UNIQUE INDEX(`item_code`, `cost_centre_code`)
 );
 
-CREATE TABLE IF NOT EXISTS `tbl_dynamics_ledger_accounts`  (
-   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-	supplier_code  varchar(8) NOT NULL,
-	ledger_name varchar(255) NULL, 
-	cost_centre_code varchar(5) NOT NULL, 
-	dynamics_supplier_code varchar(8) NULL, 
-	dynamics_ledger_name varchar(255) NULL, 
-	`time` timestamp NOT NULL DEFAULT NOW(),
-	`last_update` timestamp NOT NULL  DEFAULT NOW() ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX(`supplier_code`, `cost_centre_code`)
-);
-
 CREATE TABLE IF NOT EXISTS `tbl_dynamics_suppliers`  (
    `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
 	supplier_code  varchar(8) NOT NULL,
@@ -111,7 +98,7 @@ FROM
 		INNER JOIN
 		tbl_order_documents
 		ON tbl_order_batch_headers.batch_key = tbl_order_documents.batch_key
-		WHERE tbl_order_batch_headers.`month` IN ( '2022-03' )
+		<<<sql_filter>>>
 	) A
 	INNER JOIN tbl_suppliers ON A.supplier_code = tbl_suppliers.supplier_code WHERE A.supplier_code IS NOT NULL;
 
@@ -138,13 +125,14 @@ FROM
 	tbl_order_documents
 	ON 
 		tbl_order_batch_headers.batch_key = tbl_order_documents.batch_key
-	WHERE tbl_order_batch_headers.`month` IN ('2022-03') AND order_document_id NOT IN (SELECT order_document_id FROM tmp_processed_purchases_ids);
+	<<<sql_filter>>> AND order_document_id NOT IN (SELECT order_document_id FROM tmp_processed_purchases_ids);
 
 
 DROP TABLE IF EXISTS tmp_to_process_purchases;
 CREATE TEMPORARY TABLE tmp_to_process_purchases AS
 SELECT
 	tbl_order_batch_headers.batch_key, 
+    tbl_order_batch_headers.batch_number, 
 	tbl_order_batch_headers.`month`, 
 	tbl_order_batch_headers.class_of_card, 
 	tbl_order_documents.order_document_id, 
@@ -176,7 +164,7 @@ FROM
 	tbl_order_batch_headers
 	ON 
 		tbl_order_documents.batch_key = tbl_order_batch_headers.batch_key
-	WHERE tbl_order_batch_headers.`month` IN ('2022-03') ;
+	<<<sql_filter>>>;
 	
 	DROP TABLE IF EXISTS tmp_to_process_invoices;
 CREATE TEMPORARY TABLE tmp_to_process_invoices AS

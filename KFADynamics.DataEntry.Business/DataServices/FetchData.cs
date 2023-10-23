@@ -22,8 +22,6 @@ internal static class FetchData
       ProcessingState = ProcessingState.GettingData
     });
 
-    var filter = GetFilter(processingData);
-
     var file = processingData!.DocumentType switch
     {
       DocumentType.CountSheets => "CountSheets",
@@ -35,9 +33,12 @@ internal static class FetchData
       DocumentType.GeneralJournals => "GeneralLedger",
       _ => throw new NotImplementedException("Getting dataset of unknown document type")
     };
-    var sql = Functions.ReadManifestData<BackgroundWorkHelper>($"KFADynamics.DataEntry.Business.Resources.SQLs.{file}.sql", processingData!.CurrentErrorHandler);
+    var sql = Functions.ReadManifestData<BackgroundWorkHelper>($"KFADynamics.DataEntry.Business.Resources.SQLs.{file}.sql", processingData!.CurrentErrorHandler)!;
 
-    using var tsk = Task.Run(() => DbService.GetMySqlDataSet(sql!));
+    var sqlFilter = GetFilter(out var pars, processingData);
+    sql = sql.Replace("<<<sql_filter>>>", sqlFilter);
+
+    using var tsk = Task.Run(() => DbService.GetMySqlDataSet(sql, pars));
     for (var i = 0; i < 100000; i++)
     {
       progressMessage = progressMessage with
@@ -57,7 +58,7 @@ internal static class FetchData
     return tsk.Result;
   }
 
-  private static string GetFilter(IProcessingData? processingData)
+  private static string GetFilter(out MySqlParameter[] pars, IProcessingData processingData)
   {
     List<MySqlParameter> parameters = new();
     StringBuilder sql = new("WHERE ");
@@ -75,68 +76,137 @@ internal static class FetchData
           GetValues("tbl_stock_count_sheets.document_number", processingData.DocumentNumbers) };
         break;
       case DocumentType.Sales:
-        sql.Append("tbl_count_sheet_batches.date = @date");
-        parameters.Add(new MySqlParameter("@date", processingData.Date));
+        var months = GetValues("tbl_cash_sales_batches.batch_month", processingData.Months);
+
+        if (!months.Any())
+          throw new InvalidOperationException("Month(s) is required in order to process cash sales");
+
+        for (int i = 0; i < months.Length; i++)
+        {
+          if (i > 0) sql.Append(" OR ");
+          sql.Append($"tbl_cash_sales_batches.batch_month = @month{i + 1}");
+          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+        }
 
         values = new[]{
-          GetValues("tbl_count_sheet_batches.cost_centre_code", processingData.BranchCodes),
-          GetValues("tbl_count_sheet_batches.batch_key", processingData.BatchNumbers).Concat(
-          GetValues("tbl_count_sheet_batches.batch_number", processingData.BatchNumbers)),
-          GetValues("tbl_stock_count_sheets.document_number", processingData.DocumentNumbers) };
+          GetValues("tbl_cash_sales_batches.cost_centre_code", processingData.BranchCodes),
+          GetValues("tbl_cash_sales_batches.batch_key", processingData.BatchNumbers).Concat(
+          GetValues("tbl_cash_sales_batches.batch_number", processingData.BatchNumbers)),
+          GetValues("tbl_cash_sales_documents.cash_sale_number", processingData.DocumentNumbers) };
         break;
       case DocumentType.Purchases:
-        sql.Append("tbl_count_sheet_batches.date = @date");
-        parameters.Add(new MySqlParameter("@date", processingData.Date));
+        months = GetValues("tbl_order_batch_headers.`month`", processingData.Months);
+
+        if (!months.Any())
+          throw new InvalidOperationException("Month(s) is required in order to process purchases (40's)");
+
+        for (int i = 0; i < months.Length; i++)
+        {
+          if (i > 0) sql.Append(" OR ");
+          sql.Append($"tbl_order_batch_headers.`month` = @month{i + 1}");
+          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+        }
 
         values = new[]{
-          GetValues("tbl_count_sheet_batches.cost_centre_code", processingData.BranchCodes),
-          GetValues("tbl_count_sheet_batches.batch_key", processingData.BatchNumbers).Concat(
-          GetValues("tbl_count_sheet_batches.batch_number", processingData.BatchNumbers)),
-          GetValues("tbl_stock_count_sheets.document_number", processingData.DocumentNumbers) };
+          GetValues("tbl_order_documents.cost_centre_code", processingData.BranchCodes),
+          GetValues("tbl_order_batch_headers.batch_key", processingData.BatchNumbers).Concat(
+          GetValues("tbl_order_batch_headers.batch_number", processingData.BatchNumbers)),
+          GetValues("tbl_order_documents.lpo_number", processingData.DocumentNumbers) };
         break;
       case DocumentType.PettyCash:
-        sql.Append("tbl_count_sheet_batches.date = @date");
-        parameters.Add(new MySqlParameter("@date", processingData.Date));
+        months = GetValues("tbl_petty_cash_batch_headers.`month`", processingData.Months);
+
+        if (!months.Any())
+          throw new InvalidOperationException("Month(s) is required in order to process petty cash");
+
+        for (int i = 0; i < months.Length; i++)
+        {
+          if (i > 0) sql.Append(" OR ");
+          sql.Append($"tbl_petty_cash_batch_headers.`month` = @month{i + 1}");
+          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+        }
 
         values = new[]{
-          GetValues("tbl_count_sheet_batches.cost_centre_code", processingData.BranchCodes),
-          GetValues("tbl_count_sheet_batches.batch_key", processingData.BatchNumbers).Concat(
-          GetValues("tbl_count_sheet_batches.batch_number", processingData.BatchNumbers)),
-          GetValues("tbl_stock_count_sheets.document_number", processingData.DocumentNumbers) };
+          GetValues("tbl_petty_cash_batch_headers.cost_centre_code", processingData.BranchCodes),
+          GetValues("tbl_petty_cash_batch_headers.batch_key", processingData.BatchNumbers).Concat(
+          GetValues("tbl_petty_cash_batch_headers.batch_number", processingData.BatchNumbers)) };
         break;
       case DocumentType.Cheques:
-        sql.Append("tbl_count_sheet_batches.date = @date");
-        parameters.Add(new MySqlParameter("@date", processingData.Date));
+        months = GetValues("tbl_cheque_requisition_batches.`month`", processingData.Months);
+
+        if (!months.Any())
+          throw new InvalidOperationException("Month(s) is required in order to process cheques");
+
+        for (int i = 0; i < months.Length; i++)
+        {
+          if (i > 0) sql.Append(" OR ");
+          sql.Append($"tbl_cheque_requisition_batches.`month` = @month{i + 1}");
+          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+        }
 
         values = new[]{
-          GetValues("tbl_count_sheet_batches.cost_centre_code", processingData.BranchCodes),
-          GetValues("tbl_count_sheet_batches.batch_key", processingData.BatchNumbers).Concat(
-          GetValues("tbl_count_sheet_batches.batch_number", processingData.BatchNumbers)),
-          GetValues("tbl_stock_count_sheets.document_number", processingData.DocumentNumbers) };
+          GetValues("tbl_cheque_requisition_batches.cost_centre_code", processingData.BranchCodes),
+          GetValues("tbl_cheque_requisition_batches.batch_key", processingData.BatchNumbers).Concat(
+          GetValues("tbl_cheque_requisition_batches.batch_number", processingData.BatchNumbers)) };
         break;
       case DocumentType.Recievables:
-        sql.Append("tbl_count_sheet_batches.date = @date");
-        parameters.Add(new MySqlParameter("@date", processingData.Date));
+        months = GetValues("tbl_cash_receipts_batches.`month`", processingData.Months);
+
+        if (!months.Any())
+          throw new InvalidOperationException("Month(s) is required in order to process cash receipts (505's)");
+
+        for (int i = 0; i < months.Length; i++)
+        {
+          if (i > 0) sql.Append(" OR ");
+          sql.Append($"tbl_cash_receipts_batches.`month` = @month{i + 1}");
+          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+        }
 
         values = new[]{
-          GetValues("tbl_count_sheet_batches.cost_centre_code", processingData.BranchCodes),
-          GetValues("tbl_count_sheet_batches.batch_key", processingData.BatchNumbers).Concat(
-          GetValues("tbl_count_sheet_batches.batch_number", processingData.BatchNumbers)),
-          GetValues("tbl_stock_count_sheets.document_number", processingData.DocumentNumbers) };
+          GetValues("tbl_cash_receipts_batches.cost_centre_code", processingData.BranchCodes),
+          GetValues("tbl_cash_receipts_batches.batch_key", processingData.BatchNumbers).Concat(
+          GetValues("tbl_cash_receipts_batches.batch_number", processingData.BatchNumbers)) };
         break;
       case DocumentType.GeneralJournals:
-        sql.Append("tbl_count_sheet_batches.date = @date");
-        parameters.Add(new MySqlParameter("@date", processingData.Date));
+        months = GetValues("tbl_custom_general_ledger_batches.`month`", processingData.Months);
+
+        if (!months.Any())
+          throw new InvalidOperationException("Month(s) is required in order to process general journals");
+
+        for (int i = 0; i < months.Length; i++)
+        {
+          if (i > 0) sql.Append(" OR ");
+          sql.Append($"tbl_custom_general_ledger_batches.`month` = @month{i + 1}");
+          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+        }
 
         values = new[]{
-          GetValues("tbl_count_sheet_batches.cost_centre_code", processingData.BranchCodes),
-          GetValues("tbl_count_sheet_batches.batch_key", processingData.BatchNumbers).Concat(
-          GetValues("tbl_count_sheet_batches.batch_number", processingData.BatchNumbers)),
-          GetValues("tbl_stock_count_sheets.document_number", processingData.DocumentNumbers) };
+          GetValues("tbl_custom_general_ledger_batches.cost_centre_code", processingData.BranchCodes),
+          GetValues("tbl_custom_general_ledger_batches.batch_key", processingData.BatchNumbers).Concat(
+          GetValues("tbl_custom_general_ledger_batches.batch_number", processingData.BatchNumbers)) };
         break;
       default:
-        break;
+        throw new InvalidOperationException($"Unable to generate filters for {processingData.DocumentType} documents");
     }
+    var mx = sql.ToString().Replace("WHERE ", "");
+    sql = sql.Replace(mx, $"({mx})");
+    int paramIndex = 1;
+    foreach (var value in values)
+    {
+      StringBuilder sb = new();
+      for (int i = 0; i < value.Count(); i++)
+      {
+        var obj = value.ElementAt(i);
+        if (i > 0) sb.Append(" OR ");
+        var param = $"@p{paramIndex++}";
+        sb.Append($"{obj.Item1}={param}");
+        parameters.Add(new MySqlParameter($"{param}", obj.Item2));
+      }
+      if (value.Any())
+        sql.Append($" AND ({sb})");
+    }
+    pars = parameters.ToArray();
+    return sql.ToString();
   }
 
   private static (string, string)[] GetValues(string columnName, string code)

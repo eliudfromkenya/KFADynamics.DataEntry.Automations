@@ -1,4 +1,5 @@
-﻿using KFADynamics.DataEntry.Business.Events;
+﻿using System.Data;
+using KFADynamics.DataEntry.Business.Events;
 
 namespace KFADynamics.DataEntry.Business.AutomationServices;
 
@@ -8,7 +9,7 @@ internal class CashSalesService : IAutomationService
   public int SleepTime { get; set; }
   public int MaxNoOfActivePages { get; set; }
   public bool PostData { get; set; }
-  public IDataService? DataService { get; set; }
+  public DataSet? Data { get; set; }
 
   public event ProgressEventHandler? ProgressEvent;
 

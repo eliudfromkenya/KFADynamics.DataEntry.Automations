@@ -87,8 +87,7 @@ FROM
 	FROM
 		tbl_custom_general_ledger_batches
 		INNER JOIN tbl_custom_general_ledger_details ON tbl_custom_general_ledger_batches.batch_key = tbl_custom_general_ledger_details.batch_key 
-	WHERE
-		tbl_custom_general_ledger_batches.`month` IN ( '2022-03' ) UNION
+	<<<sql_filter>>> UNION
 		(
 		SELECT
 			tbl_custom_general_ledger_details.debit_ledger_account_code AS ledger_account_code,
@@ -96,8 +95,7 @@ FROM
 		FROM
 			tbl_custom_general_ledger_batches
 			INNER JOIN tbl_custom_general_ledger_details ON tbl_custom_general_ledger_batches.batch_key = tbl_custom_general_ledger_details.batch_key 
-		WHERE
-		tbl_custom_general_ledger_batches.`month` IN ( '2022-03' )) 
+		<<<sql_filter>>>) 
 	) AS A
 	INNER JOIN tbl_ledger_accounts ON A.ledger_account_code = tbl_ledger_accounts.ledger_account_code 
 WHERE
@@ -112,8 +110,7 @@ tbl_custom_general_ledger_details.document_number
 FROM
 	tbl_custom_general_ledger_batches
 	INNER JOIN tbl_custom_general_ledger_details ON tbl_custom_general_ledger_batches.batch_key = tbl_custom_general_ledger_details.batch_key 
-WHERE
-	tbl_custom_general_ledger_batches.`month` IN ( '2022-03' ) 
+<<<sql_filter>>> 
 	AND general_ledger_detail_id NOT IN ( SELECT general_ledger_detail_id FROM tmp_processed_general_ledger_detail_ids );
 DROP TABLE
 IF
@@ -148,7 +145,7 @@ FROM
 	tbl_custom_general_ledger_details
 	ON 
 		tbl_custom_general_ledger_batches.batch_key = tbl_custom_general_ledger_details.batch_key 
-WHERE tbl_custom_general_ledger_batches.`month` IN ( '2022-03' );
+<<<sql_filter>>>;
 INSERT INTO tbl_dynamics_ledger_accounts ( ledger_account_code, ledger_name, cost_centre_code ) SELECT DISTINCT
 ledger_account_code,
 description,

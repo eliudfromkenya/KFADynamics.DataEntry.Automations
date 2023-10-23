@@ -10,12 +10,14 @@
     <None Remove="Resources\SQLs\CashReceipts.sql" />
     <None Remove="Resources\SQLs\CashSales.sql" />
     <None Remove="Resources\SQLs\CountSheets.sql" />
+    <None Remove="Resources\SQLs\GeneralLedger.sql" />
     <None Remove="Resources\SQLs\PaidCheques.sql" />
     <None Remove="Resources\SQLs\PettyCash.sql" />
     <None Remove="Resources\SQLs\Purchases.sql" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\SQLs\GeneralLedger.sql" />
     <EmbeddedResource Include="Resources\SQLs\PaidCheques.sql" />
   </ItemGroup>
 

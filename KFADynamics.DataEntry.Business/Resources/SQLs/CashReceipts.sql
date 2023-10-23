@@ -87,8 +87,7 @@ FROM
 	FROM
 		tbl_cash_receipts_batches
 		INNER JOIN tbl_cash_receipts_details ON tbl_cash_receipts_batches.batch_key = tbl_cash_receipts_details.batch_key 
-	WHERE
-		tbl_cash_receipts_batches.`month` IN ( '2022-03' ) UNION
+	<<<sql_filter>>> UNION
 		(
 		SELECT
 			tbl_cash_receipts_details.debit_ledger_account_code AS ledger_account_code,
@@ -96,8 +95,7 @@ FROM
 		FROM
 			tbl_cash_receipts_batches
 			INNER JOIN tbl_cash_receipts_details ON tbl_cash_receipts_batches.batch_key = tbl_cash_receipts_details.batch_key 
-		WHERE
-		tbl_cash_receipts_batches.`month` IN ( '2022-03' )) 
+		<<<sql_filter>>>) 
 	) AS A
 	INNER JOIN tbl_ledger_accounts ON A.ledger_account_code = tbl_ledger_accounts.ledger_account_code 
 WHERE
@@ -112,8 +110,7 @@ tbl_cash_receipts_details.document_number
 FROM
 	tbl_cash_receipts_batches
 	INNER JOIN tbl_cash_receipts_details ON tbl_cash_receipts_batches.batch_key = tbl_cash_receipts_details.batch_key 
-WHERE
-	tbl_cash_receipts_batches.`month` IN ( '2022-03' ) 
+<<<sql_filter>>> 
 	AND cash_receipt_detail_id NOT IN ( SELECT cash_receipt_detail_id FROM tmp_processed_cash_receipt_detail_ids );
 DROP TABLE
 IF
@@ -145,8 +142,7 @@ tbl_cash_receipts_details.narration
 FROM
 	tbl_cash_receipts_batches
 	INNER JOIN tbl_cash_receipts_details ON tbl_cash_receipts_batches.batch_key = tbl_cash_receipts_details.batch_key 
-WHERE
-	tbl_cash_receipts_batches.`month` IN ( '2022-03' );
+<<<sql_filter>>>;
 INSERT INTO tbl_dynamics_ledger_accounts ( ledger_account_code, ledger_name, cost_centre_code ) SELECT DISTINCT
 ledger_account_code,
 description,

@@ -87,8 +87,7 @@ FROM
 	FROM
 		tbl_cheque_requisition_batches
 		INNER JOIN tbl_paid_cheques_details ON tbl_cheque_requisition_batches.batch_key = tbl_paid_cheques_details.batch_key 
-	WHERE
-		tbl_cheque_requisition_batches.`month` IN ( '2022-03' ) UNION
+	<<<sql_filter>>> UNION
 		(
 		SELECT
 			tbl_paid_cheques_details.debit_ledger_account_code AS ledger_account_code,
@@ -96,8 +95,7 @@ FROM
 		FROM
 			tbl_cheque_requisition_batches
 			INNER JOIN tbl_paid_cheques_details ON tbl_cheque_requisition_batches.batch_key = tbl_paid_cheques_details.batch_key 
-		WHERE
-		tbl_cheque_requisition_batches.`month` IN ( '2022-03' )) 
+		<<<sql_filter>>>) 
 	) AS A
 	INNER JOIN tbl_ledger_accounts ON A.ledger_account_code = tbl_ledger_accounts.ledger_account_code 
 WHERE
@@ -112,8 +110,7 @@ tbl_paid_cheques_details.cheque_number
 FROM
 	tbl_cheque_requisition_batches
 	INNER JOIN tbl_paid_cheques_details ON tbl_cheque_requisition_batches.batch_key = tbl_paid_cheques_details.batch_key 
-WHERE
-	tbl_cheque_requisition_batches.`month` IN ( '2022-03' ) 
+<<<sql_filter>>>
 	AND cheque_id NOT IN ( SELECT cheque_id FROM tmp_processed_cheque_ids );
 DROP TABLE
 IF
@@ -143,7 +140,7 @@ FROM
 	tbl_cheque_requisition_batches
 	ON 
 		tbl_paid_cheques_details.batch_key = tbl_cheque_requisition_batches.batch_key
-	WHERE tbl_cheque_requisition_batches.`month` IN ('2022-03') ;
+	<<<sql_filter>>> ;
 	
 	
 INSERT INTO tbl_dynamics_ledger_accounts ( ledger_account_code, ledger_name, cost_centre_code ) SELECT DISTINCT

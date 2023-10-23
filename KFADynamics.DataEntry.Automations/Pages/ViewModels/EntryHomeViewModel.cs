@@ -195,8 +195,7 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
        Dispatcher.UIThread.Invoke(() =>
        {
          CanCancel.OnNext(c);
-         CanHarmonize.OnNext(!c);
-         CanProcess.OnNext(!c);
+         this.RaisePropertyChanged(nameof(Months));
        });
      });
 
@@ -209,11 +208,14 @@ public class EntryHomeViewModel : ReactiveObject, IProcessingData
        if (!IsBusy)
        {
          CanCancel.OnNext(false);
-         CanHarmonize.OnNext(c?.Length > 6);
-         CanProcess.OnNext(c?.Length > 6);
+         CanHarmonize.OnNext(c?.Length > 6 || DocumentType == DocumentType.CountSheets);
+         CanProcess.OnNext(c?.Length > 6 || DocumentType == DocumentType.CountSheets);
        }
-       CanProcessed.OnNext(true);
-       CanPending.OnNext(true);
+       else
+       {
+         CanProcessed.OnNext(false);
+         CanPending.OnNext(false);
+       }
      });
    });
   }

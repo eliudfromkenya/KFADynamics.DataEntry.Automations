@@ -115,7 +115,7 @@ FROM
 	tbl_cash_sales_documents
 	ON 
 		tbl_cash_sales_batches.batch_key = tbl_cash_sales_documents.batch_key
-	WHERE tbl_cash_sales_batches.batch_month IN ('2022-03') AND cash_sale_id NOT IN (SELECT cash_sale_id FROM tmp_processed_cash_sales_ids);
+	<<<sql_filter>>> AND cash_sale_id NOT IN (SELECT cash_sale_id FROM tmp_processed_cash_sales_ids);
 
 
 DROP TABLE IF EXISTS tmp_to_process_cash_sales;
@@ -148,7 +148,7 @@ FROM
 	tbl_cash_sales_transactions
 	ON 
 		tbl_cash_sales_documents.cash_sale_id = tbl_cash_sales_transactions.cash_sale_document_id
-	WHERE tbl_cash_sales_batches.batch_month IN ('2022-03') ;
+	<<<sql_filter>>>;
 	
 	INSERT INTO tbl_dynamics_stock_items ( item_code, item_name, cost_centre_code ) SELECT DISTINCT
 	item_code,

@@ -3,7 +3,7 @@ IF
 	NOT EXISTS `tbl_dynamics_count_sheets` (
 		`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 		batch_key VARCHAR ( 15 ) NOT NULL,
-		`month` VARCHAR ( 8 ) NOT NULL,
+		`month` VARCHAR ( 8 ) NULL,
 		batch_number VARCHAR ( 15 ) NULL,
 		cost_centre_code VARCHAR ( 5 ) NOT NULL,
 		count_sheet_id VARCHAR ( 25 ) NOT NULL,
@@ -87,8 +87,7 @@ FROM
 	FROM
 		tbl_count_sheet_batches
 		INNER JOIN tbl_stock_count_sheets ON tbl_count_sheet_batches.batch_key = tbl_stock_count_sheets.batch_key 
-	WHERE
-		tbl_count_sheet_batches.`month` IN ( '2022-03' ) 
+	<<<sql_filter>>> 
 	) AS A
 	INNER JOIN tbl_stock_items ON A.item_code = tbl_stock_items.item_code 
 WHERE
@@ -104,8 +103,7 @@ tbl_stock_count_sheets.document_number
 FROM
 	tbl_count_sheet_batches
 	INNER JOIN tbl_stock_count_sheets ON tbl_count_sheet_batches.batch_key = tbl_stock_count_sheets.batch_key 
-WHERE
-	tbl_count_sheet_batches.`month` IN ( '2022-03' ) 
+<<<sql_filter>>> 
 	AND count_sheet_id NOT IN ( SELECT count_sheet_id FROM tmp_processed_count_sheet_ids );
 DROP TABLE
 IF
@@ -137,7 +135,7 @@ FROM
 	tbl_stock_count_sheets
 	ON 
 		tbl_count_sheet_batches.batch_key = tbl_stock_count_sheets.batch_key
-	WHERE tbl_count_sheet_batches.`month` IN ('2022-03') ;
+	<<<sql_filter>>>;
 	
 INSERT INTO tbl_dynamics_stock_items ( item_code, item_name, cost_centre_code ) SELECT DISTINCT
 item_code,

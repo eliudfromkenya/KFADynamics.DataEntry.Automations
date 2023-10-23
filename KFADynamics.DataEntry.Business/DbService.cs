@@ -17,7 +17,7 @@ public static class DbService
     var dbCommand = con.CreateCommand();
     dbCommand.CommandText = sql;
     dbCommand.CommandType = CommandType.Text;
-    dbCommand.CommandTimeout = 3000;
+    dbCommand.CommandTimeout = 30000;
     if (parameters?.Any() ?? false)
       dbCommand.Parameters.AddRange(parameters);
 

@@ -1,4 +1,5 @@
-﻿using KFADynamics.DataEntry.Business.Events;
+﻿using System.Data;
+using KFADynamics.DataEntry.Business.Events;
 
 namespace KFADynamics.DataEntry.Business;
 
@@ -10,7 +11,7 @@ public interface IAutomationService
   int SleepTime { get; set; }
   int MaxNoOfActivePages { get; set; }
   bool PostData { get; set; }
-  IDataService? DataService { get; set; }
+  DataSet? Data { get; set; }
   event ProgressEventHandler? ProgressEvent;
   Task ProcessAsync();
 }

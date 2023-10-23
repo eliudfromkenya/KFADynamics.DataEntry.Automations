@@ -3,7 +3,7 @@ using KFADynamics.DataEntry.Business.Events;
 
 namespace KFADynamics.DataEntry.Business.AutomationServices;
 
-internal class PettyCashService : IAutomationService
+internal class GeneralJournalsService : IAutomationService
 {
   public bool AsHeadless { get; set; }
   public int SleepTime { get; set; }
