@@ -8,6 +8,7 @@ using Humanizer;
 using OfficeOpenXml;
 using Microsoft.VisualBasic;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace KFADynamics.DataEntry.Business.DataServices;
 
@@ -35,13 +36,26 @@ internal static class FetchData
           if (dataTable.Columns[c].DataType == typeof(decimal))
             workSheet.Column(c + 1).Style.Numberformat.Format = moneyFormat;
         }
+        try
+        {
+          workSheet.View.SplitPanes(1, 0);
+          var firstRowStyle = workSheet.Row(1).Style;
+          firstRowStyle.Font.Color.SetColor(Color.Purple);
+          firstRowStyle.Font.Bold = true;
+          firstRowStyle.Font.Size= 13;
+          firstRowStyle.Font.UnderLine = true;
+          firstRowStyle.Font.UnderLineType = OfficeOpenXml.Style.ExcelUnderLineType.Double;
+          workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
+        }
+        catch { }
       }
 
       var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "KFA to Dynamics Data Transfer");
       if (!Directory.Exists(folder))
         Directory.CreateDirectory(folder);
-      var filePath = Path.Combine(folder, $"Data {DateTime.Now:yyyy MMM dd HH_mm_ss}.xlsx");
+      var filePath = Path.Combine(folder, $"Data_{DateTime.Now:yyyy MMM_dd_HH_mm_ss}.xlsx");
       pck.SaveAs(new FileInfo(filePath));
+      Thread.Sleep(1000);
       Process.Start(filePath);
     }
     catch (Exception ex)
@@ -110,7 +124,7 @@ internal static class FetchData
   {
     List<MySqlParameter> parameters = new();
     StringBuilder sql = new("WHERE ");
-    IEnumerable<(string, string)>[]? values = null;
+    IEnumerable<(string, string)>[]? values;
     switch (processingData!.DocumentType)
     {
       case DocumentType.CountSheets:
@@ -133,7 +147,7 @@ internal static class FetchData
         {
           if (i > 0) sql.Append(" OR ");
           sql.Append($"tbl_cash_sales_batches.batch_month = @month{i + 1}");
-          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+          parameters.Add(new MySqlParameter($"@month{i + 1}", months[i].Item2));
         }
 
         values = new[]{
@@ -152,7 +166,7 @@ internal static class FetchData
         {
           if (i > 0) sql.Append(" OR ");
           sql.Append($"tbl_order_batch_headers.`month` = @month{i + 1}");
-          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+          parameters.Add(new MySqlParameter($"@month{i + 1}", months[i].Item2));
         }
 
         values = new[]{
@@ -171,7 +185,7 @@ internal static class FetchData
         {
           if (i > 0) sql.Append(" OR ");
           sql.Append($"tbl_petty_cash_batch_headers.`month` = @month{i + 1}");
-          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+          parameters.Add(new MySqlParameter($"@month{i + 1}", months[i].Item2));
         }
 
         values = new[]{
@@ -189,7 +203,7 @@ internal static class FetchData
         {
           if (i > 0) sql.Append(" OR ");
           sql.Append($"tbl_cheque_requisition_batches.`month` = @month{i + 1}");
-          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+          parameters.Add(new MySqlParameter($"@month{i + 1}", months[i].Item2));
         }
 
         values = new[]{
@@ -207,7 +221,7 @@ internal static class FetchData
         {
           if (i > 0) sql.Append(" OR ");
           sql.Append($"tbl_cash_receipts_batches.`month` = @month{i + 1}");
-          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+          parameters.Add(new MySqlParameter($"@month{i + 1}", months[i].Item2));
         }
 
         values = new[]{
@@ -225,7 +239,7 @@ internal static class FetchData
         {
           if (i > 0) sql.Append(" OR ");
           sql.Append($"tbl_custom_general_ledger_batches.`month` = @month{i + 1}");
-          parameters.Add(new MySqlParameter($"@month{i + 1}", processingData.Months));
+          parameters.Add(new MySqlParameter($"@month{i + 1}", months[i].Item2));
         }
 
         values = new[]{
