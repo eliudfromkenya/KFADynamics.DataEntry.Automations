@@ -4,11 +4,57 @@ using KFA.ItemCodes.Classes;
 using KFADynamics.DataEntry.Business.Classes;
 using KFADynamics.DataEntry.Business.Models;
 using MySqlConnector;
+using Humanizer;
+using OfficeOpenXml;
+using Microsoft.VisualBasic;
+using System.Diagnostics;
 
 namespace KFADynamics.DataEntry.Business.DataServices;
 
 internal static class FetchData
 {
+  static void ExportToExcel(DataSet ds, IProcessingData processingData)
+  {
+    try
+    {
+      foreach (DataTable table in ds.Tables)
+        foreach (DataColumn dc in table.Columns)
+          dc.ColumnName = dc.ColumnName?.Titleize();
+
+      string dateFormat = "MMM dd, yyyy";
+      string moneyFormat = "#,##0.00";
+    using ExcelPackage pck = new ExcelPackage();
+      foreach (DataTable dataTable in ds.Tables)
+      {
+        ExcelWorksheet workSheet = pck.Workbook.Worksheets.Add(dataTable.TableName);
+        workSheet.Cells["A1"].LoadFromDataTable(dataTable, true);
+        for (int c = 0; c < dataTable.Columns.Count; c++)
+        {
+          if (dataTable.Columns[c].DataType == typeof(DateTime))
+            workSheet.Column(c + 1).Style.Numberformat.Format = dateFormat;
+          if (dataTable.Columns[c].DataType == typeof(decimal))
+            workSheet.Column(c + 1).Style.Numberformat.Format = moneyFormat;
+        }
+      }
+
+      var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "KFA to Dynamics Data Transfer");
+      if (!Directory.Exists(folder))
+        Directory.CreateDirectory(folder);
+      var filePath = Path.Combine(folder, $"Data {DateTime.Now:yyyy MMM dd HH_mm_ss}.xlsx");
+      pck.SaveAs(new FileInfo(filePath));
+      Process.Start(filePath);
+    }
+    catch (Exception ex)
+    {
+      processingData?.ShowMessage(new UserMessage
+      {
+        Message = ex.Message,
+        MessageDetails = ex.StackTrace,
+        MessageTitle = "Error exporting to excel",
+        MessageType = MessageType.Error
+      });
+    }
+  }
   internal static DataSet GetData(IProcessingData processingData)
   {
     ProgressMessage progressMessage = default;
@@ -54,6 +100,8 @@ internal static class FetchData
       Thread.Sleep(100);
     }
     var ds = tsk.Result;
+
+    ExportToExcel(ds, processingData!);
     NotifyGetData(ds, processingData);
     return tsk.Result;
   }
