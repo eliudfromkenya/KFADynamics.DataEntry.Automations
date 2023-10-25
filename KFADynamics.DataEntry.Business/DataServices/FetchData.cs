@@ -36,18 +36,54 @@ internal static class FetchData
           if (dataTable.Columns[c].DataType == typeof(decimal))
             workSheet.Column(c + 1).Style.Numberformat.Format = moneyFormat;
         }
+       
         try
         {
-          workSheet.View.SplitPanes(1, 0);
+          workSheet.InsertRow(1, 1);
+          workSheet.Cells[1, 1, 1, workSheet.Dimension.Columns].Merge = true;
+          workSheet.Cells[1, 1, 1, 1].Value = dataTable.TableName?.Titleize();
           var firstRowStyle = workSheet.Row(1).Style;
           firstRowStyle.Font.Color.SetColor(Color.Purple);
           firstRowStyle.Font.Bold = true;
-          firstRowStyle.Font.Size= 13;
+          firstRowStyle.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+          firstRowStyle.Font.Size = 24;
           firstRowStyle.Font.UnderLine = true;
           firstRowStyle.Font.UnderLineType = OfficeOpenXml.Style.ExcelUnderLineType.Double;
           workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
         }
-        catch { }
+        catch (Exception ex)
+        {
+          processingData?.ShowMessage(new UserMessage
+          {
+            Message = ex.Message,
+            MessageDetails = ex.StackTrace,
+            MessageTitle = "Error exporting to excel",
+            MessageType = MessageType.Error
+          });
+        }
+
+        try
+        {
+          workSheet.View.FreezePanes(2, 1);
+          workSheet.Row(2).CustomHeight = true;
+          var firstRowStyle = workSheet.Row(2).Style;
+          firstRowStyle.Font.Color.SetColor(Color.Purple);
+          firstRowStyle.Font.Bold = true;
+          firstRowStyle.Font.Size = 13;
+          firstRowStyle.Font.UnderLine = true;
+          firstRowStyle.Font.UnderLineType = OfficeOpenXml.Style.ExcelUnderLineType.Double;
+          workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
+        }
+        catch (Exception ex)
+        {
+          processingData?.ShowMessage(new UserMessage
+          {
+            Message = ex.Message,
+            MessageDetails = ex.StackTrace,
+            MessageTitle = "Error exporting to excel",
+            MessageType = MessageType.Error
+          });
+        }
       }
 
       var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "KFA to Dynamics Data Transfer");
